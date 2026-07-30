@@ -4,15 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <title>Series_db</title>
-<link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#000000">
-<link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
-<link rel="icon" type="image/png" sizes="16x16" href="icons/favicon-16.png">
-<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Series_db">
-<meta name="mobile-web-app-capable" content="yes">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
@@ -44,8 +35,12 @@
     --safe-t:env(safe-area-inset-top, 0px);
   }
   *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
-  html,body{ margin:0; padding:0; background:var(--bg); color:var(--text); font-family:'Poppins',system-ui,sans-serif; -webkit-font-smoothing:antialiased; overscroll-behavior-y:none; width:100%; overflow-x:hidden; }
+  html,body{ margin:0; padding:0; background:var(--bg); color:var(--text); font-family:'Poppins',system-ui,sans-serif; -webkit-font-smoothing:antialiased; overscroll-behavior-y:none; width:100%; overflow-x:hidden; -webkit-overflow-scrolling:touch; }
   body{ min-height:100vh; padding-bottom: calc(80px + var(--safe-b)); }
+  button, .navbtn, .icon-btn, .add-btn, .btn, .fchip, .poster-card, .rank-row, .premiere-row,
+  .menu-item, .see-all, .sheet-close, .seg button, .cover-upload-btn, .cover-remove, .top-tab{
+    touch-action: manipulation;
+  }
   ::selection{ background:var(--green-glow); color:var(--text); }
   .mono{ font-family:'JetBrains Mono',monospace; font-variant-numeric:tabular-nums; }
   h1,h2,h3{ font-family:'Poppins',sans-serif; margin:0; }
@@ -113,9 +108,9 @@
   .section-title h2{ font-size:17.5px; font-weight:700; margin:0; }
   .section-title .see-all{ font-size:12px; color:var(--green); cursor:pointer; font-weight:600; }
 
-  .hscroll{ display:flex; gap:10px; overflow-x:auto; padding:0 16px 4px; scrollbar-width:none; }
+  .hscroll{ display:flex; gap:10px; overflow-x:auto; padding:0 16px 4px; scrollbar-width:none; -webkit-overflow-scrolling:touch; touch-action:pan-x; overscroll-behavior-x:contain; scroll-snap-type:x proximity; scroll-padding-left:16px; }
   .hscroll::-webkit-scrollbar{ display:none; }
-  .chip-stat{ flex:0 0 auto; min-width:116px; background:linear-gradient(155deg, var(--surface-2), var(--surface)); border:1px solid var(--line); border-radius:var(--radius-md); padding:13px 14px; }
+  .chip-stat{ flex:0 0 auto; min-width:116px; background:linear-gradient(155deg, var(--surface-2), var(--surface)); border:1px solid var(--line); border-radius:var(--radius-md); padding:13px 14px; scroll-snap-align:start; }
   .chip-stat .dot{ width:8px; height:8px; border-radius:50%; display:inline-block; margin-right:6px; }
   .chip-stat .name{ font-size:12px; color:var(--text-dim); font-weight:500; }
   .chip-stat .val{ font-size:19px; font-weight:700; margin-top:6px; }
@@ -195,6 +190,7 @@
   .premiere-title{ font-size:14.5px; font-weight:700; }
   .premiere-meta{ display:flex; align-items:center; gap:6px; margin-top:4px; flex-wrap:wrap; }
   .premiere-note{ font-size:11.5px; color:var(--text-faint); margin-top:3px; }
+  .premiere-manual-tag{ font-size:9px; font-weight:700; color:var(--text-faint); background:var(--surface-3); padding:2px 6px; border-radius:6px; }
   .premiere-badge{ flex-shrink:0; font-size:10.5px; font-weight:700; padding:4px 9px; border-radius:20px; background:rgba(39,196,106,0.14); color:var(--green); white-space:nowrap; }
   .premiere-badge.live{ background:rgba(232,184,75,0.16); color:var(--amber); }
   #syncTraktBtn:disabled{ opacity:0.5; pointer-events:none; }
@@ -213,9 +209,9 @@
   .search-wrap input{ width:100%; background:var(--surface); border:1px solid var(--line); border-radius:12px; padding:11px 14px 11px 38px; color:var(--text); font-size:14px; font-family:inherit; }
   .search-wrap input::placeholder{ color:var(--text-faint); }
   .search-wrap svg{ position:absolute; left:12px; top:50%; transform:translateY(-50%); }
-  .filter-row{ display:flex; gap:8px; overflow-x:auto; scrollbar-width:none; margin-bottom:10px; }
+  .filter-row{ display:flex; gap:8px; overflow-x:auto; scrollbar-width:none; margin-bottom:10px; -webkit-overflow-scrolling:touch; touch-action:pan-x; overscroll-behavior-x:contain; scroll-snap-type:x proximity; scroll-padding-left:16px; }
   .filter-row::-webkit-scrollbar{display:none;}
-  .fchip{ flex:0 0 auto; padding:7px 13px; border-radius:20px; border:1px solid var(--line); background:var(--surface); color:var(--text-dim); font-size:12px; font-weight:600; cursor:pointer; white-space:nowrap; }
+  .fchip{ flex:0 0 auto; padding:7px 13px; border-radius:20px; border:1px solid var(--line); background:var(--surface); color:var(--text-dim); font-size:12px; font-weight:600; cursor:pointer; white-space:nowrap; scroll-snap-align:start; }
   .fchip.active{ background:var(--green); color:#00230F; border-color:var(--green); }
   .sortbar{ display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; }
   .count-label{ font-size:12px; color:var(--text-faint); }
@@ -229,23 +225,34 @@
   .navbtn svg{ width:20px; height:20px; }
 
   /* ---------- Sheet ---------- */
-  .sheet-overlay{ position:fixed; inset:0; background:rgba(0,0,0,0.75); backdrop-filter:blur(2px); z-index:50; opacity:0; pointer-events:none; transition:opacity .22s ease; }
+  .sheet-overlay{ position:fixed; inset:0; background:rgba(0,0,0,0.75); backdrop-filter:blur(2px); z-index:50; opacity:0; pointer-events:none; transition:opacity .22s ease; touch-action:none; overscroll-behavior:contain; }
   .sheet-overlay.show{ opacity:1; pointer-events:auto; }
   .sheet{ position:fixed; left:0; right:0; bottom:0; z-index:51; max-width:560px; margin:0 auto; background:#0C0C0C; border-radius:22px 22px 0 0; border:1px solid var(--line); border-bottom:none; max-height:88vh; display:flex; flex-direction:column; transform:translateY(100%); transition:transform .28s cubic-bezier(.32,.72,0,1); padding-bottom:var(--safe-b); }
   .sheet.show{ transform:translateY(0); }
   .sheet-handle{ width:36px; height:4px; background:var(--line); border-radius:3px; margin:10px auto 4px; }
   .sheet-head{ display:flex; align-items:center; justify-content:space-between; padding:6px 18px 12px; border-bottom:1px solid var(--line-soft); }
   .sheet-head h3{ font-size:17px; font-weight:700; }
-  .sheet-body{ padding:16px 18px; overflow-y:auto; }
+  .sheet-body{ padding:16px 18px; overflow-y:auto; -webkit-overflow-scrolling:touch; overscroll-behavior:contain; touch-action:pan-y; }
   .sheet-close{ width:32px; height:32px; border-radius:10px; background:var(--surface); display:flex; align-items:center; justify-content:center; color:var(--text-dim); }
 
   .field{ margin-bottom:14px; }
   .field label{ display:block; font-size:11.5px; color:var(--text-faint); text-transform:uppercase; letter-spacing:0.06em; margin-bottom:6px; font-weight:600; }
   .field input, .field select, .field textarea{ width:100%; background:var(--surface); border:1px solid var(--line); border-radius:11px; padding:12px 13px; color:var(--text); font-size:14.5px; font-family:inherit; }
+  .field input:disabled{ opacity:0.55; }
   .field input:focus, .field select:focus, .field textarea:focus{ outline:none; border-color:var(--green); }
   .field-row{ display:flex; gap:10px; }
   .field-row .field{ flex:1; }
   .field-hint{ font-size:11px; color:var(--text-faint); margin-top:5px; }
+  .season-row{ display:flex; align-items:center; gap:8px; padding:8px 10px; background:var(--surface); border:1px solid var(--line); border-radius:10px; margin-top:6px; }
+  .season-row .s-label{ flex:1; font-size:13px; font-weight:600; }
+  .season-row .s-meta{ font-size:11.5px; color:var(--text-faint); margin-top:1px; }
+  .season-row .s-plus{ width:28px; height:28px; border-radius:8px; background:var(--surface-2); color:var(--green); display:flex; align-items:center; justify-content:center; font-weight:700; font-size:15px; flex-shrink:0; cursor:pointer; }
+  .season-row .s-plus.disabled{ opacity:0.3; pointer-events:none; }
+  .season-row .s-del{ width:28px; height:28px; border-radius:8px; background:var(--surface-2); color:var(--red); display:flex; align-items:center; justify-content:center; flex-shrink:0; cursor:pointer; }
+  .season-add-row{ display:flex; gap:8px; margin-top:8px; align-items:center; }
+  .season-add-row input{ background:var(--surface); border:1px solid var(--line); border-radius:10px; padding:9px 10px; color:var(--text); font-size:13px; font-family:inherit; width:0; flex:1; min-width:0; }
+  .season-add-row button{ flex-shrink:0; padding:9px 12px; font-size:12.5px; white-space:nowrap; width:auto; }
+
   .cover-picker{ display:flex; align-items:center; gap:12px; }
   .cover-preview{ width:64px; height:96px; flex-shrink:0; border-radius:10px; background:var(--surface); border:1px solid var(--line); overflow:hidden; display:flex; align-items:center; justify-content:center; color:var(--text-faint); }
   .cover-preview img{ width:100%; height:100%; object-fit:cover; }
@@ -499,6 +506,18 @@
       <div class="field">
         <label>Capítulos vistos</label>
         <input type="number" id="f_capsVistos" min="0" value="0">
+      </div>
+    </div>
+    <div class="field">
+      <div style="display:flex; align-items:center; justify-content:space-between;">
+        <label style="margin-bottom:0;">Temporadas por separado</label>
+        <span class="field-hint" id="seasonModeHint" style="margin-top:0;"></span>
+      </div>
+      <div id="seasonList"></div>
+      <div class="season-add-row">
+        <input type="number" id="f_seasonCaps" placeholder="Capítulos" min="1">
+        <input type="number" id="f_seasonVistos" placeholder="Vistos (opc.)" min="0">
+        <button type="button" class="btn btn-ghost" id="addSeasonBtn">+ Añadir temporada</button>
       </div>
     </div>
     <div class="field">
@@ -924,7 +943,10 @@ function renderPremieres(){
       <div class="premiere-date"><div class="d">${date.getDate()}</div><div class="m">${MESES_CORTOS[date.getMonth()]}</div></div>
       <div class="premiere-body">
         <div class="premiere-title">${escapeHtml(s.serie)}</div>
-        <div class="premiere-meta"><span class="plat-chip-inline" style="background:${ps.bg}; color:${ps.fg}; font-size:9px; font-weight:700; padding:2px 6px; border-radius:6px;">${ps.label}</span></div>
+        <div class="premiere-meta">
+          <span class="plat-chip-inline" style="background:${ps.bg}; color:${ps.fg}; font-size:9px; font-weight:700; padding:2px 6px; border-radius:6px;">${ps.label}</span>
+          ${s.estrenoOrigen==='manual' ? `<span class="premiere-manual-tag">puesta a mano</span>` : ''}
+        </div>
         ${s.estrenoNota ? `<div class="premiere-note">${escapeHtml(s.estrenoNota)}</div>` : ''}
       </div>
       ${badge}
@@ -965,6 +987,10 @@ async function traktFetch(path, clientId){
 }
 
 async function syncSeriesWithTrakt(s, clientId){
+  if(s.estrenoOrigen === 'manual' && s.estrenoFecha){
+    s.traktStatus = 'skipped_manual';
+    return;
+  }
   const query = s.traktQuery || s.serie;
   try{
     const results = await traktFetch('/search/show?query='+encodeURIComponent(query)+'&limit=1', clientId);
@@ -980,12 +1006,14 @@ async function syncSeriesWithTrakt(s, clientId){
       const d = new Date(nextEp.first_aired);
       s.estrenoFecha = d.toISOString().slice(0,10);
       s.estrenoNota = `T${nextEp.season}E${nextEp.number}${nextEp.title ? ' · '+nextEp.title : ''} · vía Trakt`;
+      s.estrenoOrigen = 'trakt';
       s.traktStatus = 'ok';
     } else {
       let show = null;
       try{ show = await traktFetch('/shows/'+slug+'?extended=full', clientId); }catch(e){ show = null; }
       if(show && (show.status === 'returning series' || show.status === 'in production')){
         s.estrenoNota = 'Renovada, sin fecha confirmada aún (Trakt)';
+        s.estrenoOrigen = 'trakt';
         s.traktStatus = 'ok';
       } else {
         s.traktStatus = 'ok';
@@ -1020,7 +1048,8 @@ async function syncWithTrakt(){
   renderPremieres();
   const found = targets.filter(s=>s.traktStatus==='ok').length;
   const notFound = targets.filter(s=>s.traktStatus==='not_found').length;
-  toast(`Sincronizado: ${found} encontradas, ${notFound} sin identificar`);
+  const skippedManual = targets.filter(s=>s.traktStatus==='skipped_manual').length;
+  toast(`Sincronizado: ${found} actualizadas, ${skippedManual} con fecha manual (sin tocar), ${notFound} sin identificar`);
 }
 document.getElementById('syncTraktBtn').addEventListener('click', syncWithTrakt);
 
@@ -1164,6 +1193,9 @@ function openEdit(id){
   document.getElementById('f_estrenoNota').value = s ? (s.estrenoNota||'') : '';
   updateCalcPreview();
 
+  pendingTemporadas = (s && Array.isArray(s.temporadas)) ? JSON.parse(JSON.stringify(s.temporadas)) : [];
+  renderSeasonList();
+
   pendingCoverImage = s ? (coverCache[s.id] || null) : null;
   updateCoverPreview();
 
@@ -1197,6 +1229,72 @@ function updateCalcPreview(){
 
 /* ---------- Carátula (imagen de portada) ---------- */
 let pendingCoverImage = null;
+let pendingTemporadas = [];
+
+function computeFromTemporadas(temporadas){
+  return {
+    tempDisp: temporadas.length,
+    tempVistas: temporadas.filter(t=>t.capitulos>0 && t.vistos>=t.capitulos).length,
+    capsTotales: temporadas.reduce((a,t)=>a+(t.capitulos||0),0),
+    capsVistos: temporadas.reduce((a,t)=>a+Math.min(t.vistos||0, t.capitulos||0),0),
+  };
+}
+function applyTemporadasToFields(){
+  const hasSeasons = pendingTemporadas.length > 0;
+  const ids = ['f_tempDisp','f_tempVistas','f_capsTotales','f_capsVistos'];
+  ids.forEach(id=>{ document.getElementById(id).disabled = hasSeasons; });
+  document.getElementById('seasonModeHint').textContent = hasSeasons ? 'los campos de arriba se calculan solos' : '';
+  if(hasSeasons){
+    const c = computeFromTemporadas(pendingTemporadas);
+    document.getElementById('f_tempDisp').value = c.tempDisp;
+    document.getElementById('f_tempVistas').value = c.tempVistas;
+    document.getElementById('f_capsTotales').value = c.capsTotales;
+    document.getElementById('f_capsVistos').value = c.capsVistos;
+    updateCalcPreview();
+  }
+}
+function renderSeasonList(){
+  const list = document.getElementById('seasonList');
+  list.innerHTML = pendingTemporadas.map((t,i)=>{
+    const completa = t.capitulos>0 && t.vistos>=t.capitulos;
+    return `
+    <div class="season-row" data-idx="${i}">
+      <div style="flex:1; min-width:0;">
+        <div class="s-label">Temporada ${i+1}</div>
+        <div class="s-meta">${t.vistos}/${t.capitulos} capítulos${completa?' · completa':''}</div>
+      </div>
+      <div class="s-plus ${completa?'disabled':''}" data-action="plus" title="Sumar capítulo visto">+1</div>
+      <div class="s-del" data-action="del" title="Eliminar temporada">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </div>
+    </div>`;
+  }).join('');
+  list.querySelectorAll('.season-row').forEach(row=>{
+    const idx = Number(row.dataset.idx);
+    row.querySelector('[data-action="plus"]').addEventListener('click', ()=>{
+      const t = pendingTemporadas[idx];
+      if(t.vistos < t.capitulos){ t.vistos++; renderSeasonList(); applyTemporadasToFields(); }
+    });
+    row.querySelector('[data-action="del"]').addEventListener('click', ()=>{
+      pendingTemporadas.splice(idx,1);
+      renderSeasonList();
+      applyTemporadasToFields();
+    });
+  });
+  applyTemporadasToFields();
+}
+document.getElementById('addSeasonBtn').addEventListener('click', ()=>{
+  const caps = Number(document.getElementById('f_seasonCaps').value)||0;
+  if(caps <= 0){ toast('Indica cuántos capítulos tiene la temporada'); return; }
+  const vistosInput = document.getElementById('f_seasonVistos').value;
+  const vistos = vistosInput === '' ? caps : Math.max(0, Math.min(caps, Number(vistosInput)||0));
+  pendingTemporadas.push({ capitulos: caps, vistos });
+  document.getElementById('f_seasonCaps').value = '';
+  document.getElementById('f_seasonVistos').value = '';
+  renderSeasonList();
+  toast(`Temporada ${pendingTemporadas.length} añadida`);
+});
+
 function updateCoverPreview(){
   const prev = document.getElementById('coverPreview');
   const removeBtn = document.getElementById('coverRemoveBtn');
@@ -1239,9 +1337,21 @@ document.getElementById('coverRemoveBtn').addEventListener('click', ()=>{
 document.getElementById('saveBtn').addEventListener('click', async ()=>{
   const serie = document.getElementById('f_serie').value.trim();
   if(!serie){ toast('Ponle un nombre a la serie'); return; }
-  const capsVistos = Number(document.getElementById('f_capsVistos').value)||0;
-  const capsTotales = Number(document.getElementById('f_capsTotales').value)||0;
+
+  let tempDisp, tempVistas, capsTotales, capsVistos;
+  if(pendingTemporadas.length > 0){
+    const c = computeFromTemporadas(pendingTemporadas);
+    tempDisp = c.tempDisp; tempVistas = c.tempVistas; capsTotales = c.capsTotales; capsVistos = c.capsVistos;
+  } else {
+    tempDisp = Number(document.getElementById('f_tempDisp').value)||0;
+    tempVistas = Number(document.getElementById('f_tempVistas').value)||0;
+    capsTotales = Number(document.getElementById('f_capsTotales').value)||0;
+    capsVistos = Number(document.getElementById('f_capsVistos').value)||0;
+  }
   if(capsVistos > capsTotales){ toast('Capítulos vistos no puede superar el total'); return; }
+
+  const nuevaFecha = document.getElementById('f_estrenoFecha').value;
+  const nuevaNota = document.getElementById('f_estrenoNota').value.trim();
 
   const payload = {
     serie,
@@ -1249,24 +1359,28 @@ document.getElementById('saveBtn').addEventListener('click', async ()=>{
     genero: document.getElementById('f_genero').value,
     status: selectedStatus,
     nota: Number(document.getElementById('f_nota').value),
-    tempDisp: Number(document.getElementById('f_tempDisp').value)||0,
-    tempVistas: Number(document.getElementById('f_tempVistas').value)||0,
-    capsTotales, capsVistos,
+    tempDisp, tempVistas, capsTotales, capsVistos,
+    temporadas: pendingTemporadas.length ? JSON.parse(JSON.stringify(pendingTemporadas)) : undefined,
     duracionCap: Number(document.getElementById('f_duracionCap').value)||0,
-    fechaNext: document.getElementById('f_estrenoFecha').value ? 'SI' : '',
-    estrenoFecha: document.getElementById('f_estrenoFecha').value,
-    estrenoNota: document.getElementById('f_estrenoNota').value.trim(),
+    fechaNext: nuevaFecha ? 'SI' : '',
+    estrenoFecha: nuevaFecha,
+    estrenoNota: nuevaNota,
     traktQuery: document.getElementById('f_traktQuery').value.trim(),
   };
 
   let targetId = editingId;
   if(editingId){
     const s = DATA.find(x=>x.id===editingId);
+    const cambioFechaOnota = (s.estrenoFecha||'') !== nuevaFecha || (s.estrenoNota||'') !== nuevaNota;
+    if(payload.temporadas === undefined) delete s.temporadas;
     Object.assign(s, payload);
+    if(cambioFechaOnota){
+      s.estrenoOrigen = nuevaFecha ? 'manual' : '';
+    }
     toast('Serie actualizada');
   } else {
     targetId = 'id_'+Date.now();
-    DATA.push({ id: targetId, createdAt: Date.now(), ...payload });
+    DATA.push({ id: targetId, createdAt: Date.now(), estrenoOrigen: nuevaFecha ? 'manual' : '', ...payload });
     toast('Serie añadida');
   }
   saveData();
