@@ -148,7 +148,9 @@
     border-radius:6px; padding:4px 7px; font-size:11.5px; font-weight:700; line-height:1.22;
     display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;
   }
-  .poster-status-dot{ flex-shrink:0; margin-top:4px; width:8px; height:8px; border-radius:50%; box-shadow:0 0 0 2px rgba(0,0,0,0.5); }
+  .poster-status-col{ display:flex; flex-direction:column; align-items:center; gap:3px; flex-shrink:0; }
+  .poster-status-dot{ flex-shrink:0; width:8px; height:8px; border-radius:50%; box-shadow:0 0 0 2px rgba(0,0,0,0.5); }
+  .poster-season-tag{ font-size:8px; font-weight:800; color:#fff; background:rgba(0,0,0,0.55); backdrop-filter:blur(2px); padding:1.5px 4px; border-radius:4px; letter-spacing:0.02em; white-space:nowrap; }
   .poster-bottom{
     position:absolute; left:7px; right:7px; bottom:9px; z-index:2;
     display:flex; align-items:center; justify-content:space-between; gap:6px;
@@ -271,6 +273,18 @@
   .btn-row{ display:flex; gap:10px; margin-top:6px; }
   .btn-row .btn{ flex:1; }
 
+  .quick-info{ font-size:13.5px; color:var(--text-dim); padding:2px 2px 16px; }
+  .quick-info .stars{ color:var(--mint); }
+  .quick-panel{ display:flex; flex-direction:column; gap:8px; padding-bottom:6px; }
+  .qa-btn{
+    display:flex; align-items:center; gap:10px; padding:14px 16px; border-radius:14px;
+    background:var(--surface); border:1px solid var(--line); font-size:14.5px; font-weight:600; color:var(--text);
+    cursor:pointer;
+  }
+  .qa-btn:active{ background:var(--surface-2); }
+  .qa-btn.primary{ background:var(--green); color:#00230F; border-color:var(--green); }
+  .qa-btn.primary:active{ background:var(--green-2); }
+  .qa-btn.qa-status-opt{ justify-content:center; }
   .menu-item{ display:flex; align-items:center; gap:12px; padding:14px 4px; border-bottom:1px solid var(--line-soft); color:var(--text); font-size:14px; cursor:pointer; }
   .menu-item:last-child{ border-bottom:none; }
   .menu-item svg{ color:var(--text-dim); flex-shrink:0; }
@@ -520,9 +534,15 @@
         <button type="button" class="btn btn-ghost" id="addSeasonBtn">+ Añadir temporada</button>
       </div>
     </div>
-    <div class="field">
-      <label>Duración capítulo (min)</label>
-      <input type="number" id="f_duracionCap" min="0" value="45">
+    <div class="field-row">
+      <div class="field">
+        <label>Duración capítulo (min)</label>
+        <input type="number" id="f_duracionCap" min="0" value="45">
+      </div>
+      <div class="field">
+        <label>Repetida x</label>
+        <input type="number" id="f_repeticiones" min="1" value="1">
+      </div>
     </div>
     <div class="field-hint" id="calcPreview" style="margin-bottom:14px;"></div>
     <div class="field-row">
@@ -555,6 +575,50 @@
   </div>
   <div class="sheet-body">
     <div class="rank-card" id="rankFullList"></div>
+  </div>
+</div>
+
+<!-- ===== Sheet: Acciones rápidas ===== -->
+<div class="sheet-overlay" id="quickOverlay"></div>
+<div class="sheet" id="quickSheet">
+  <div class="sheet-handle"></div>
+  <div class="sheet-head">
+    <h3 id="quickTitle">Serie</h3>
+    <div class="sheet-close" id="quickClose">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </div>
+  </div>
+  <div class="sheet-body">
+    <div class="quick-info" id="quickInfo"></div>
+    <div class="quick-panel" id="quickMainPanel">
+      <div class="qa-btn" id="qaEdit">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4z"/></svg>
+        Editar
+      </div>
+      <div class="qa-btn primary" id="qaCap">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        + Capítulo
+      </div>
+      <div class="qa-btn" id="qaSeason">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v6c0 1.66 3.58 3 8 3s8-1.34 8-3V5"/><path d="M4 11v6c0 1.66 3.58 3 8 3s8-1.34 8-3v-6"/></svg>
+        + Temporada
+      </div>
+      <div class="qa-btn" id="qaFin" style="display:none;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+        Fin de temporada
+      </div>
+      <div class="qa-btn" id="qaStatus">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 2v6h-6"/><path d="M3 12a9 9 0 0 1 15-6.7L21 8"/><path d="M3 22v-6h6"/><path d="M21 12a9 9 0 0 1-15 6.7L3 16"/></svg>
+        Actualizar estado
+      </div>
+    </div>
+    <div class="quick-panel" id="quickStatusPanel" style="display:none;">
+      <div class="qa-btn qa-status-opt" data-val="AL DÍA">Al día</div>
+      <div class="qa-btn qa-status-opt" data-val="PENDIENTE">Pendiente</div>
+      <div class="qa-btn qa-status-opt" data-val="TERMINADA">Terminada</div>
+      <div class="qa-btn qa-status-opt" data-val="LA DEJO">La dejo</div>
+      <div class="qa-btn" id="qaStatusBack" style="color:var(--text-faint);">← Volver</div>
+    </div>
   </div>
 </div>
 
@@ -758,7 +822,7 @@ function seedFromOriginal(){
 function saveData(){ localStorage.setItem(STORAGE_KEY, JSON.stringify(DATA)); }
 
 /* ---------- Helpers ---------- */
-function minutosDe(s){ return (s.capsVistos||0) * (s.duracionCap||0); }
+function minutosDe(s){ return (s.capsVistos||0) * (s.duracionCap||0) * (s.repeticiones||1); }
 function progresoDe(s){ return s.capsTotales ? Math.min(1, (s.capsVistos||0)/s.capsTotales) : 0; }
 function fmtMinutesShort(min){
   min = Math.round(min);
@@ -827,6 +891,8 @@ function posterCard(s, gridMode){
   const artBg = cover ? `background:#0a0a0a;` : `background:${posterGradient(s)}`;
   const coverImg = cover ? `<img class="cover-img" src="${cover}" alt="">` : '';
   const titleTop = cover ? '' : `<div class="poster-title-top">${escapeHtml(s.serie)}</div>`;
+  const temp = temporadaActualDe(s);
+  const seasonTag = (showProgress && temp) ? `<div class="poster-season-tag">S${temp}</div>` : '';
   return `
   <div class="poster-card ${gridMode?'grid-mode':''}" data-id="${s.id}">
     <div class="poster-art" style="${artBg}">
@@ -834,7 +900,10 @@ function posterCard(s, gridMode){
       <div class="shade" style="background:${statusShadeGradient(stColor)}"></div>
       <div class="poster-top ${cover?'no-title':''}">
         ${titleTop}
-        <div class="poster-status-dot" style="background:${stColor}"></div>
+        <div class="poster-status-col">
+          <div class="poster-status-dot" style="background:${stColor}"></div>
+          ${seasonTag}
+        </div>
       </div>
       <div class="poster-bottom">
         <div class="poster-rating">${STAR_SVG.replace('currentColor','#8CEFB8')}${Number(s.nota).toFixed(1)}</div>
@@ -846,7 +915,7 @@ function posterCard(s, gridMode){
 }
 function attachCardEvents(container){
   container.querySelectorAll('.poster-card').forEach(el=>{
-    el.addEventListener('click', ()=>openEdit(el.dataset.id));
+    el.addEventListener('click', ()=>openQuickActions(el.dataset.id));
   });
 }
 
@@ -953,7 +1022,7 @@ function renderPremieres(){
     </div>`;
   }).join('');
   container.querySelectorAll('.premiere-row').forEach(row=>{
-    row.addEventListener('click', ()=>openEdit(row.dataset.id));
+    row.addEventListener('click', ()=>openQuickActions(row.dataset.id));
   });
   renderUnmatchedPanel();
 }
@@ -1156,7 +1225,7 @@ function openRankSheet(sortKey, title){
       </div>`).join('');
   }
   document.getElementById('rankFullList').querySelectorAll('.rank-row').forEach(row=>{
-    row.addEventListener('click', ()=>{ closeRankSheet(); openEdit(row.dataset.id); });
+    row.addEventListener('click', ()=>{ closeRankSheet(); openQuickActions(row.dataset.id); });
   });
   rankOverlay.classList.add('show');
   rankSheet.classList.add('show');
@@ -1188,6 +1257,7 @@ function openEdit(id){
   document.getElementById('f_capsTotales').value = s ? s.capsTotales : 10;
   document.getElementById('f_capsVistos').value = s ? s.capsVistos : 0;
   document.getElementById('f_duracionCap').value = s ? s.duracionCap : 45;
+  document.getElementById('f_repeticiones').value = s ? (s.repeticiones||1) : 1;
   document.getElementById('f_estrenoFecha').value = s ? (s.estrenoFecha||'') : '';
   document.getElementById('f_traktQuery').value = s ? (s.traktQuery||'') : '';
   document.getElementById('f_estrenoNota').value = s ? (s.estrenoNota||'') : '';
@@ -1215,16 +1285,19 @@ document.querySelectorAll('#f_status_seg button').forEach(b=>{
 document.getElementById('f_nota').addEventListener('input', (e)=>{
   document.getElementById('notaVal').textContent = Number(e.target.value).toFixed(2).replace(/\.?0+$/,'') || '0';
 });
-['f_capsTotales','f_capsVistos','f_duracionCap'].forEach(id=>{
+['f_capsTotales','f_capsVistos','f_duracionCap','f_repeticiones'].forEach(id=>{
   document.getElementById(id).addEventListener('input', updateCalcPreview);
 });
 function updateCalcPreview(){
   const caps = Number(document.getElementById('f_capsVistos').value)||0;
   const dur = Number(document.getElementById('f_duracionCap').value)||0;
   const total = Number(document.getElementById('f_capsTotales').value)||0;
-  const mins = caps*dur;
+  const rep = Math.max(1, Number(document.getElementById('f_repeticiones').value)||1);
+  const mins = caps*dur*rep;
   const prog = total ? Math.round((caps/total)*100) : 0;
-  document.getElementById('calcPreview').textContent = `${fmtMinutesShort(mins)} vistas · ${prog}% completado`;
+  let txt = `${fmtMinutesShort(mins)} vistas · ${prog}% completado`;
+  if(rep>1) txt += ` (×${rep} por repeticiones)`;
+  document.getElementById('calcPreview').textContent = txt;
 }
 
 /* ---------- Carátula (imagen de portada) ---------- */
@@ -1239,6 +1312,143 @@ function computeFromTemporadas(temporadas){
     capsVistos: temporadas.reduce((a,t)=>a+Math.min(t.vistos||0, t.capitulos||0),0),
   };
 }
+
+/* ---------- Temporada actual / acciones rápidas ---------- */
+function getOpenSeason(s){
+  if(!Array.isArray(s.temporadas)) return null;
+  return s.temporadas.find(t=>t.enCurso) || null;
+}
+function temporadaActualDe(s){
+  if(Array.isArray(s.temporadas) && s.temporadas.length){
+    const idx = s.temporadas.findIndex(t=>t.enCurso);
+    if(idx>-1) return idx+1;
+    return s.temporadas.length;
+  }
+  return s.tempDisp || null;
+}
+function ensureTemporadas(s){
+  if(Array.isArray(s.temporadas) && s.temporadas.length) return;
+  const totalSeasons = Math.max(1, s.tempDisp||1);
+  const totalCaps = s.capsTotales||0;
+  const totalVistos = s.capsVistos||0;
+  const avgCaps = totalSeasons>0 ? Math.max(1, Math.round(totalCaps/totalSeasons)) : (totalCaps||1);
+  const seasons = [];
+  let remainingVistos = totalVistos;
+  for(let i=0;i<totalSeasons;i++){
+    const capitulos = avgCaps;
+    const vistos = Math.max(0, Math.min(capitulos, remainingVistos));
+    remainingVistos -= vistos;
+    seasons.push({ capitulos, vistos, enCurso:false });
+  }
+  const last = seasons[seasons.length-1];
+  if(last && last.vistos < last.capitulos && (s.status==='AL DÍA'||s.status==='PENDIENTE')){
+    last.enCurso = true;
+  }
+  s.temporadas = seasons;
+}
+function applyComputedFromTemporadas(s){
+  const c = computeFromTemporadas(s.temporadas);
+  s.tempDisp = c.tempDisp; s.tempVistas = c.tempVistas; s.capsTotales = c.capsTotales; s.capsVistos = c.capsVistos;
+}
+function refreshAfterQuickAction(){
+  saveData();
+  renderHome();
+  if(currentView==='list') renderSeriesGrid();
+  if(currentView==='premieres') renderPremieres();
+  renderQuickActions();
+}
+function quickAddEpisode(id){
+  const s = DATA.find(x=>x.id===id); if(!s) return;
+  ensureTemporadas(s);
+  const open = getOpenSeason(s);
+  if(!open){ toast('No hay temporada en curso — pulsa "+ Temporada" primero'); return; }
+  open.capitulos++; open.vistos++;
+  applyComputedFromTemporadas(s);
+  refreshAfterQuickAction();
+  toast(`S${s.temporadas.indexOf(open)+1}: ${open.vistos} capítulos vistos`);
+}
+function quickAddSeason(id){
+  const s = DATA.find(x=>x.id===id); if(!s) return;
+  ensureTemporadas(s);
+  if(getOpenSeason(s)){ toast('Ya tienes una temporada en curso'); return; }
+  s.temporadas.push({ capitulos:0, vistos:0, enCurso:true });
+  applyComputedFromTemporadas(s);
+  refreshAfterQuickAction();
+  toast(`Temporada ${s.temporadas.length} iniciada`);
+}
+function quickEndSeason(id){
+  const s = DATA.find(x=>x.id===id); if(!s) return;
+  const open = getOpenSeason(s);
+  if(!open){ toast('No hay ninguna temporada en curso'); return; }
+  open.enCurso = false;
+  applyComputedFromTemporadas(s);
+  refreshAfterQuickAction();
+  toast('Temporada cerrada');
+}
+function quickSetStatus(id, status){
+  const s = DATA.find(x=>x.id===id); if(!s) return;
+  s.status = status;
+  if(status==='TERMINADA' || status==='LA DEJO'){
+    const open = getOpenSeason(s);
+    if(open){ open.enCurso = false; applyComputedFromTemporadas(s); }
+  }
+  refreshAfterQuickAction();
+  toast('Estado actualizado');
+}
+
+let quickActionsId = null;
+function openQuickActions(id){
+  quickActionsId = id;
+  document.getElementById('quickMainPanel').style.display = 'flex';
+  document.getElementById('quickStatusPanel').style.display = 'none';
+  renderQuickActions();
+  quickOverlay.classList.add('show');
+  quickSheet.classList.add('show');
+}
+function closeQuickActions(){
+  quickOverlay.classList.remove('show');
+  quickSheet.classList.remove('show');
+  quickActionsId = null;
+}
+function renderQuickActions(){
+  const s = DATA.find(x=>x.id===quickActionsId);
+  if(!s){ closeQuickActions(); return; }
+  document.getElementById('quickTitle').textContent = s.serie;
+  const temp = temporadaActualDe(s);
+  const open = getOpenSeason(s);
+  const enSeguimiento = (s.status==='AL DÍA' || s.status==='PENDIENTE');
+  let info = `${starsHtml(s.nota)} <span class="mono">${Number(s.nota).toFixed(1)}</span> · ${STATUS_LABEL[s.status]}`;
+  if(enSeguimiento && temp){
+    info += ` · S${temp}`;
+    if(open) info += ` (${open.vistos} caps)`;
+  }
+  document.getElementById('quickInfo').innerHTML = info;
+  document.getElementById('qaFin').style.display = open ? 'flex' : 'none';
+}
+const quickOverlay = document.getElementById('quickOverlay');
+const quickSheet = document.getElementById('quickSheet');
+document.getElementById('quickClose').addEventListener('click', closeQuickActions);
+quickOverlay.addEventListener('click', (e)=>{ if(e.target===quickOverlay) closeQuickActions(); });
+document.getElementById('qaEdit').addEventListener('click', ()=>{ const id=quickActionsId; closeQuickActions(); openEdit(id); });
+document.getElementById('qaCap').addEventListener('click', ()=>quickAddEpisode(quickActionsId));
+document.getElementById('qaSeason').addEventListener('click', ()=>quickAddSeason(quickActionsId));
+document.getElementById('qaFin').addEventListener('click', ()=>quickEndSeason(quickActionsId));
+document.getElementById('qaStatus').addEventListener('click', ()=>{
+  document.getElementById('quickMainPanel').style.display = 'none';
+  document.getElementById('quickStatusPanel').style.display = 'flex';
+});
+document.getElementById('qaStatusBack').addEventListener('click', ()=>{
+  document.getElementById('quickStatusPanel').style.display = 'none';
+  document.getElementById('quickMainPanel').style.display = 'flex';
+});
+document.querySelectorAll('.qa-status-opt').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    quickSetStatus(quickActionsId, btn.dataset.val);
+    document.getElementById('quickStatusPanel').style.display = 'none';
+    document.getElementById('quickMainPanel').style.display = 'flex';
+  });
+});
+
 function applyTemporadasToFields(){
   const hasSeasons = pendingTemporadas.length > 0;
   const ids = ['f_tempDisp','f_tempVistas','f_capsTotales','f_capsVistos'];
@@ -1362,6 +1572,7 @@ document.getElementById('saveBtn').addEventListener('click', async ()=>{
     tempDisp, tempVistas, capsTotales, capsVistos,
     temporadas: pendingTemporadas.length ? JSON.parse(JSON.stringify(pendingTemporadas)) : undefined,
     duracionCap: Number(document.getElementById('f_duracionCap').value)||0,
+    repeticiones: Math.max(1, Number(document.getElementById('f_repeticiones').value)||1),
     fechaNext: nuevaFecha ? 'SI' : '',
     estrenoFecha: nuevaFecha,
     estrenoNota: nuevaNota,
