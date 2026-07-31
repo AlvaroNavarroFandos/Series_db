@@ -208,9 +208,18 @@
   }
   .add-btn:active{ background:var(--green-2); }
   .search-wrap{ position:relative; margin-bottom:10px; }
-  .search-wrap input{ width:100%; background:var(--surface); border:1px solid var(--line); border-radius:12px; padding:11px 14px 11px 38px; color:var(--text); font-size:14px; font-family:inherit; }
+  .search-wrap input{ width:100%; background:var(--surface); border:1px solid var(--line); border-radius:12px; padding:11px 46px 11px 38px; color:var(--text); font-size:14px; font-family:inherit; }
   .search-wrap input::placeholder{ color:var(--text-faint); }
   .search-wrap svg{ position:absolute; left:12px; top:50%; transform:translateY(-50%); }
+  .filter-toggle-btn{
+    position:absolute; right:5px; top:50%; transform:translateY(-50%); width:32px; height:32px;
+    border-radius:9px; background:var(--surface-2); border:1px solid var(--line); color:var(--text-dim);
+    display:flex; align-items:center; justify-content:center; cursor:pointer; touch-action:manipulation;
+  }
+  .filter-toggle-btn.active{ background:rgba(39,196,106,0.14); border-color:rgba(39,196,106,0.4); color:var(--green); }
+  .filter-dot{ position:absolute; top:-2px; right:-2px; width:8px; height:8px; border-radius:50%; background:var(--green); border:2px solid var(--bg); }
+  .filters-panel{ display:none; margin-bottom:2px; }
+  .filters-panel.show{ display:block; }
   .filter-row{ display:flex; gap:8px; overflow-x:auto; scrollbar-width:none; margin-bottom:10px; -webkit-overflow-scrolling:touch; touch-action:pan-x; overscroll-behavior-x:contain; scroll-snap-type:x proximity; scroll-padding-left:16px; }
   .filter-row::-webkit-scrollbar{display:none;}
   .fchip{ flex:0 0 auto; padding:7px 13px; border-radius:20px; border:1px solid var(--line); background:var(--surface); color:var(--text-dim); font-size:12px; font-weight:600; cursor:pointer; white-space:nowrap; scroll-snap-align:start; }
@@ -383,8 +392,16 @@
       <div class="search-wrap">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#71766F" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
         <input type="text" id="searchInput" placeholder="Buscar serie…">
+        <button class="filter-toggle-btn" id="filterToggleBtn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
+          <span class="filter-dot" id="filterDot" style="display:none;"></span>
+        </button>
       </div>
-      <div class="filter-row" id="statusFilterRow"></div>
+      <div class="filters-panel" id="filtersPanel">
+        <div class="filter-row" id="statusFilterRow"></div>
+        <div class="filter-row" id="platformFilterRow"></div>
+        <div class="filter-row" id="genreFilterRow"></div>
+      </div>
       <div class="sortbar">
         <span class="count-label" id="resultCount">0 series</span>
         <select class="sort-select" id="sortSelect">
@@ -714,6 +731,8 @@ let coverCache = {}; // id -> dataURL, cache en memoria respaldado por IndexedDB
 let currentView = 'home';
 let editingId = null;
 let currentFilterStatus = 'TODAS';
+let currentFilterPlatform = 'TODAS';
+let currentFilterGenero = 'TODAS';
 let currentSort = 'nota_desc';
 let searchQuery = '';
 
@@ -1135,12 +1154,38 @@ function renderStatusFilterRow(){
   const statuses = ['TODAS','AL DÍA','PENDIENTE','TERMINADA','LA DEJO'];
   row.innerHTML = statuses.map(st=>`<div class="fchip ${st===currentFilterStatus?'active':''}" data-status="${st}">${st==='TODAS'?'Todas':STATUS_LABEL[st]}</div>`).join('');
   row.querySelectorAll('.fchip').forEach(el=>{
-    el.addEventListener('click', ()=>{ currentFilterStatus = el.dataset.status; renderSeriesGrid(); renderStatusFilterRow(); });
+    el.addEventListener('click', ()=>{ currentFilterStatus = el.dataset.status; renderSeriesGrid(); renderStatusFilterRow(); updateFilterDot(); });
   });
 }
+function renderPlatformFilterRow(){
+  const row = document.getElementById('platformFilterRow');
+  const platforms = [...new Set(DATA.map(s=>s.plataforma))].sort();
+  row.innerHTML = ['TODAS', ...platforms].map(p=>`<div class="fchip ${p===currentFilterPlatform?'active':''}" data-platform="${p}">${p==='TODAS'?'Todas las plataformas':platStyle(p).label}</div>`).join('');
+  row.querySelectorAll('.fchip').forEach(el=>{
+    el.addEventListener('click', ()=>{ currentFilterPlatform = el.dataset.platform; renderSeriesGrid(); renderPlatformFilterRow(); updateFilterDot(); });
+  });
+}
+function renderGenreFilterRow(){
+  const row = document.getElementById('genreFilterRow');
+  const generos = [...new Set(DATA.map(s=>s.genero))].sort();
+  row.innerHTML = ['TODAS', ...generos].map(g=>`<div class="fchip ${g===currentFilterGenero?'active':''}" data-genero="${g}">${g==='TODAS'?'Todos los géneros':g}</div>`).join('');
+  row.querySelectorAll('.fchip').forEach(el=>{
+    el.addEventListener('click', ()=>{ currentFilterGenero = el.dataset.genero; renderSeriesGrid(); renderGenreFilterRow(); updateFilterDot(); });
+  });
+}
+function updateFilterDot(){
+  const active = currentFilterStatus!=='TODAS' || currentFilterPlatform!=='TODAS' || currentFilterGenero!=='TODAS';
+  document.getElementById('filterDot').style.display = active ? 'block' : 'none';
+  document.getElementById('filterToggleBtn').classList.toggle('active', active);
+}
+document.getElementById('filterToggleBtn').addEventListener('click', ()=>{
+  document.getElementById('filtersPanel').classList.toggle('show');
+});
 function getFilteredSorted(){
   let list = DATA.slice();
   if(currentFilterStatus !== 'TODAS') list = list.filter(s=>s.status===currentFilterStatus);
+  if(currentFilterPlatform !== 'TODAS') list = list.filter(s=>s.plataforma===currentFilterPlatform);
+  if(currentFilterGenero !== 'TODAS') list = list.filter(s=>s.genero===currentFilterGenero);
   if(searchQuery.trim()){
     const q = searchQuery.trim().toLowerCase();
     list = list.filter(s=>s.serie.toLowerCase().includes(q) || s.plataforma.toLowerCase().includes(q) || s.genero.toLowerCase().includes(q));
@@ -1189,7 +1234,7 @@ function switchView(view){
   document.querySelectorAll('.navbtn[data-view]').forEach(b=>b.classList.toggle('active', b.dataset.view===view));
   document.getElementById('pageTitle').textContent = view==='home' ? 'Análisis' : (view==='list' ? 'Series' : 'Estrenos');
   window.scrollTo(0,0);
-  if(view==='list'){ renderStatusFilterRow(); renderSeriesGrid(); }
+  if(view==='list'){ renderStatusFilterRow(); renderPlatformFilterRow(); renderGenreFilterRow(); updateFilterDot(); renderSeriesGrid(); }
   if(view==='home') renderHome();
   if(view==='premieres') renderPremieres();
 }
@@ -1754,7 +1799,7 @@ document.getElementById('importFile').addEventListener('change', (e)=>{
       coverCache = newCovers || {};
       if(Object.keys(coverCache).length) await idbBulkSetCovers(coverCache);
       renderHome();
-      if(currentView==='list'){ renderStatusFilterRow(); renderSeriesGrid(); }
+      if(currentView==='list'){ renderStatusFilterRow(); renderPlatformFilterRow(); renderGenreFilterRow(); updateFilterDot(); renderSeriesGrid(); }
       closeMenu();
       toast(`Importadas ${DATA.length} series`);
     }catch(err){
