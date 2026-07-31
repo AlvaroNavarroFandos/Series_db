@@ -125,6 +125,7 @@
   .rank-name{ font-size:14px; font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
   .rank-meta{ font-size:11px; color:var(--text-faint); margin-top:1px; }
   .rank-val{ font-size:12.5px; color:var(--text-dim); flex-shrink:0; font-weight:600; }
+  .rep-tag{ font-size:10px; font-weight:700; color:var(--text-faint); background:var(--surface-3); padding:1.5px 6px; border-radius:6px; }
 
   /* ---------- Poster card ---------- */
   .poster-card{ flex:0 0 auto; width:126px; cursor:pointer; }
@@ -137,7 +138,6 @@
   .poster-card:active .poster-art{ transform:scale(0.96); }
   .poster-art .pattern{ position:absolute; inset:0; opacity:0.5; }
   .poster-art .cover-img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; z-index:0; }
-  .poster-art .shade{ position:absolute; inset:0; }
   .poster-top{
     position:absolute; top:7px; left:7px; right:7px; z-index:2;
     display:flex; align-items:flex-start; gap:6px;
@@ -1123,9 +1123,6 @@ function hexToRgba(hex, alpha){
   const r = parseInt(hex.substring(0,2),16), g = parseInt(hex.substring(2,4),16), b = parseInt(hex.substring(4,6),16);
   return `rgba(${r},${g},${b},${alpha})`;
 }
-function statusShadeGradient(stColor){
-  return `linear-gradient(180deg, rgba(0,0,0,0) 38%, rgba(0,0,0,0.5) 62%, ${hexToRgba(stColor,0.55)} 88%, ${hexToRgba(stColor,0.8)} 100%)`;
-}
 function escapeHtml(s){ return String(s).replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
 const PLAY_SVG = `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>`;
 const STAR_SVG = `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.6 7.1.6-5.4 4.7 1.6 7-6.2-3.9L6 21l1.6-7L2.2 9.2l7.1-.6z"/></svg>`;
@@ -1136,6 +1133,7 @@ function posterCard(s, gridMode){
   const stColor = STATUS_COLOR[s.status] || '#8A938A';
   const ps = platStyle(s.plataforma);
   const showProgress = s.status === 'AL DÍA' || s.status === 'PENDIENTE';
+  const barWidth = showProgress ? (prog*100) : 100;
   const cover = coverCache[s.id];
   const artBg = cover ? `background:#0a0a0a;` : `background:${posterGradient(s)}`;
   const coverImg = cover ? `<img class="cover-img" src="${cover}" alt="">` : '';
@@ -1146,7 +1144,6 @@ function posterCard(s, gridMode){
   <div class="poster-card ${gridMode?'grid-mode':''}" data-id="${s.id}">
     <div class="poster-art" style="${artBg}">
       ${coverImg}
-      <div class="shade" style="background:${statusShadeGradient(stColor)}"></div>
       <div class="poster-top ${cover?'no-title':''}">
         ${titleTop}
         <div class="poster-status-col">
@@ -1158,7 +1155,7 @@ function posterCard(s, gridMode){
         <div class="poster-rating">${STAR_SVG.replace('currentColor','#8CEFB8')}${Number(s.nota).toFixed(1)}</div>
         <div class="poster-platform" style="background:${ps.bg}; color:${ps.fg};">${ps.label}</div>
       </div>
-      ${showProgress ? `<div class="poster-progress"><div class="f" style="width:${prog*100}%; background:${stColor}"></div></div>` : ''}
+      <div class="poster-progress"><div class="f" style="width:${barWidth}%; background:${stColor}"></div></div>
     </div>
   </div>`;
 }
@@ -1203,7 +1200,7 @@ function renderDashboard(){
   document.getElementById('topTime').innerHTML = topTime.map((s,i)=>`
     <div class="rank-row">
       <div class="rank-num">${i+1}</div>
-      <div class="rank-body"><div class="rank-name">${escapeHtml(s.serie)}</div><div class="rank-meta">${s.capsVistos} capítulos</div></div>
+      <div class="rank-body"><div class="rank-name">${escapeHtml(s.serie)}${s.repeticiones>1?` <span class="rep-tag">×${s.repeticiones}</span>`:''}</div><div class="rank-meta">${s.capsVistos} capítulos</div></div>
       <div class="rank-val">${fmtMinutesShort(minutosDe(s))}</div>
     </div>`).join('') || emptyRow();
 
@@ -1832,7 +1829,7 @@ function openRankSheet(sortKey, title){
     document.getElementById('rankFullList').innerHTML = list.map((s,i)=>`
       <div class="rank-row" data-id="${s.id}">
         <div class="rank-num">${i+1}</div>
-        <div class="rank-body"><div class="rank-name">${escapeHtml(s.serie)}</div><div class="rank-meta">${s.capsVistos} capítulos</div></div>
+        <div class="rank-body"><div class="rank-name">${escapeHtml(s.serie)}${s.repeticiones>1?` <span class="rep-tag">×${s.repeticiones}</span>`:''}</div><div class="rank-meta">${s.capsVistos} capítulos</div></div>
         <div class="rank-val">${fmtMinutesShort(minutosDe(s))}</div>
       </div>`).join('');
   }
