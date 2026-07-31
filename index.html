@@ -197,6 +197,38 @@
   .premiere-badge.live{ background:rgba(232,184,75,0.16); color:var(--amber); }
   #syncTraktBtn:disabled{ opacity:0.5; pointer-events:none; }
   .unmatched-panel{ margin:20px 16px 0; background:var(--surface); border:1px solid var(--line); border-radius:14px; padding:12px 14px; }
+  .backup-row{ display:flex; align-items:center; justify-content:space-between; gap:10px; padding:12px 14px; background:var(--surface); border:1px solid var(--line); border-radius:12px; margin-bottom:8px; }
+  .backup-date{ font-size:13.5px; font-weight:700; }
+  .backup-meta{ font-size:11.5px; color:var(--text-faint); margin-top:2px; }
+
+  /* ---------- Wrapped anual ---------- */
+  .wrapped-overlay{
+    position:fixed; inset:0; z-index:70; background:#000; display:none; overflow:hidden;
+  }
+  .wrapped-overlay.show{ display:block; }
+  .wrapped-close{ position:absolute; top:calc(14px + var(--safe-t)); right:14px; z-index:75; width:34px; height:34px; border-radius:50%; background:rgba(255,255,255,0.14); display:flex; align-items:center; justify-content:center; }
+  .wrapped-dots{ position:absolute; top:calc(14px + var(--safe-t)); left:14px; right:58px; z-index:75; display:flex; gap:5px; }
+  .wrapped-dots .d{ flex:1; height:3px; border-radius:3px; background:rgba(255,255,255,0.25); overflow:hidden; }
+  .wrapped-dots .d .f{ height:100%; width:0%; background:#fff; }
+  .wrapped-dots .d.done .f{ width:100%; }
+  .wrapped-dots .d.active .f{ width:100%; transition:width 5s linear; }
+  .wrapped-slides{ position:relative; width:100%; height:100%; }
+  .wrapped-slide{
+    position:absolute; inset:0; display:none; flex-direction:column; align-items:center; justify-content:center;
+    text-align:center; padding:80px 26px 100px; color:#fff;
+  }
+  .wrapped-slide.active{ display:flex; }
+  .wrapped-slide .wbg{ position:absolute; inset:0; z-index:0; }
+  .wrapped-slide .wshade{ position:absolute; inset:0; z-index:1; background:linear-gradient(180deg, rgba(0,0,0,0.35), rgba(0,0,0,0.55) 50%, rgba(0,0,0,0.85)); }
+  .wrapped-slide .wcontent{ position:relative; z-index:2; max-width:340px; }
+  .wrapped-eyebrow{ font-size:12px; font-weight:700; letter-spacing:0.14em; text-transform:uppercase; color:var(--mint); margin-bottom:14px; }
+  .wrapped-cover{ width:150px; height:225px; border-radius:16px; margin:0 auto 20px; overflow:hidden; box-shadow:0 20px 50px rgba(0,0,0,0.6); background-size:cover; background-position:center; border:1px solid rgba(255,255,255,0.15); }
+  .wrapped-title{ font-size:26px; font-weight:800; line-height:1.15; margin-bottom:8px; }
+  .wrapped-sub{ font-size:14px; color:rgba(255,255,255,0.75); }
+  .wrapped-big-num{ font-size:52px; font-weight:800; line-height:1; margin-bottom:6px; background:linear-gradient(100deg, #fff, var(--mint)); -webkit-background-clip:text; background-clip:text; color:transparent; }
+  .wrapped-chip{ display:inline-block; font-size:13px; font-weight:700; padding:6px 14px; border-radius:20px; margin-top:10px; }
+  .wrapped-nav{ position:absolute; inset:0; z-index:71; display:flex; }
+  .wrapped-tap-zone{ flex:1; }
   .unmatched-panel h3{ font-size:12.5px; font-weight:700; color:var(--text-dim); margin-bottom:6px; }
   .unmatched-panel .desc{ font-size:11.5px; color:var(--text-faint); margin-bottom:8px; }
   .unmatched-chip{ display:inline-block; font-size:11px; background:var(--surface-2); color:var(--text-dim); padding:4px 9px; border-radius:20px; margin:2px 4px 2px 0; }
@@ -227,6 +259,21 @@
   .sortbar{ display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; }
   .count-label{ font-size:12px; color:var(--text-faint); }
   select.sort-select{ background:var(--surface); border:1px solid var(--line); color:var(--text); border-radius:10px; padding:7px 10px; font-size:12px; font-family:inherit; }
+  .view-toggle{ display:flex; background:var(--surface); border:1px solid var(--line); border-radius:10px; padding:2px; gap:2px; }
+  .vt-btn{ width:28px; height:26px; display:flex; align-items:center; justify-content:center; border-radius:7px; border:none; background:transparent; color:var(--text-faint); cursor:pointer; touch-action:manipulation; }
+  .vt-btn.active{ background:var(--green); color:#00230F; }
+  .compact-row{
+    display:flex; align-items:center; gap:10px; padding:9px 10px; margin-bottom:8px;
+    background:var(--surface); border:1px solid var(--line); border-radius:12px; cursor:pointer;
+  }
+  .compact-row:active{ background:var(--surface-2); }
+  .compact-thumb{ width:36px; height:36px; border-radius:9px; flex-shrink:0; background-size:cover; background-position:center; display:flex; align-items:center; justify-content:center; position:relative; }
+  .compact-thumb .dot{ position:absolute; bottom:-2px; right:-2px; width:9px; height:9px; border-radius:50%; box-shadow:0 0 0 2px var(--surface); }
+  .compact-body{ flex:1; min-width:0; }
+  .compact-title{ font-size:13.5px; font-weight:700; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .compact-meta{ display:flex; align-items:center; gap:6px; margin-top:3px; }
+  .compact-nota{ flex-shrink:0; font-size:12px; font-weight:700; color:var(--mint); display:flex; align-items:center; gap:3px; }
+  .compact-list-wrap{ padding:0 16px; }
 
   /* ---------- Bottom nav ---------- */
   .navbar{ position:fixed; left:0; right:0; bottom:0; z-index:40; display:flex; justify-content:center; padding-bottom:var(--safe-b); }
@@ -272,6 +319,7 @@
   .cover-remove{ font-size:12px; color:var(--red); text-align:center; cursor:pointer; }
   .seg{ display:flex; background:var(--surface); border:1px solid var(--line); border-radius:11px; padding:3px; gap:3px; }
   .seg button{ flex:1; padding:9px 0; border-radius:8px; border:none; background:transparent; color:var(--text-dim); font-size:12px; font-weight:600; font-family:inherit; }
+  .seg.seg-5 button{ font-size:9.5px; padding:9px 2px; }
   .seg button.active{ background:var(--green); color:#00230F; }
 
   .btn{ width:100%; padding:14px 0; border-radius:12px; border:none; font-size:14.5px; font-weight:700; font-family:inherit; cursor:pointer; }
@@ -301,6 +349,11 @@
   .menu-item.danger{ color:var(--red); }
   .menu-item.danger svg{ color:var(--red); }
   .menu-note{ font-size:11.5px; color:var(--text-faint); line-height:1.5; padding:10px 2px 4px; border-top:1px solid var(--line-soft); margin-top:6px; }
+  .toggle-row{ display:flex; align-items:center; justify-content:space-between; gap:10px; font-size:12.5px; color:var(--text-dim); }
+  .toggle-switch{ width:40px; height:23px; border-radius:20px; background:var(--surface-3); position:relative; cursor:pointer; flex-shrink:0; transition:background .15s ease; }
+  .toggle-switch.on{ background:var(--green); }
+  .toggle-switch .knob{ position:absolute; top:2px; left:2px; width:19px; height:19px; border-radius:50%; background:#fff; transition:left .15s ease; }
+  .toggle-switch.on .knob{ left:19px; }
 
   .toast{ position:fixed; left:50%; bottom:calc(96px + var(--safe-b)); transform:translateX(-50%) translateY(8px); background:var(--surface-2); border:1px solid var(--line); color:var(--text); padding:11px 18px; border-radius:12px; font-size:13px; z-index:60; opacity:0; transition:all .25s ease; pointer-events:none; box-shadow:0 8px 24px rgba(0,0,0,0.5); max-width:88%; text-align:center; }
   .toast.show{ opacity:1; transform:translateX(-50%) translateY(0); }
@@ -405,16 +458,26 @@
       </div>
       <div class="sortbar">
         <span class="count-label" id="resultCount">0 series</span>
-        <select class="sort-select" id="sortSelect">
-          <option value="nota_desc">Nota ↓</option>
-          <option value="nota_asc">Nota ↑</option>
-          <option value="tiempo_desc">Tiempo visto ↓</option>
-          <option value="tiempo_asc">Tiempo visto ↑</option>
-          <option value="alpha_asc">A–Z</option>
-          <option value="alpha_desc">Z–A</option>
-          <option value="progreso_desc">Progreso ↓</option>
-          <option value="reciente">Añadidas recientemente</option>
-        </select>
+        <div style="display:flex; gap:6px; align-items:center;">
+          <div class="view-toggle" id="viewToggle">
+            <button type="button" class="vt-btn" data-mode="grid" title="Cuadrícula">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+            </button>
+            <button type="button" class="vt-btn" data-mode="compact" title="Lista compacta">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="18" x2="20" y2="18"/></svg>
+            </button>
+          </div>
+          <select class="sort-select" id="sortSelect">
+            <option value="nota_desc">Nota ↓</option>
+            <option value="nota_asc">Nota ↑</option>
+            <option value="tiempo_desc">Tiempo visto ↓</option>
+            <option value="tiempo_asc">Tiempo visto ↑</option>
+            <option value="alpha_asc">A–Z</option>
+            <option value="alpha_desc">Z–A</option>
+            <option value="progreso_desc">Progreso ↓</option>
+            <option value="reciente">Añadidas recientemente</option>
+          </select>
+        </div>
       </div>
     </div>
     <div class="grid-wrap" id="seriesGrid"></div>
@@ -436,6 +499,21 @@
     <div id="premieresUnmatched"></div>
   </div>
 
+  <!-- ===== POR VER (lista de espera) ===== -->
+  <div class="view" id="view-watchlist">
+    <div class="toolbar">
+      <div class="list-head">
+        <h2>Por ver</h2>
+        <button class="add-btn" id="addWatchlistBtn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Añadir
+        </button>
+      </div>
+    </div>
+    <div class="premieres-sub" id="watchlistSub"></div>
+    <div id="watchlistList"></div>
+  </div>
+
   <div class="view" id="view-add"></div>
 </div>
 
@@ -449,6 +527,10 @@
     <div class="navbtn" data-view="list">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v6c0 1.66 3.58 3 8 3s8-1.34 8-3V5"/><path d="M4 11v6c0 1.66 3.58 3 8 3s8-1.34 8-3v-6"/></svg>
       Series
+    </div>
+    <div class="navbtn" data-view="watchlist">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+      Por ver
     </div>
     <div class="navbtn" data-view="premieres">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><circle cx="12" cy="15" r="1.5" fill="currentColor" stroke="none"/></svg>
@@ -509,9 +591,10 @@
     </div>
     <div class="field">
       <label>Estado</label>
-      <div class="seg" id="f_status_seg">
-        <button type="button" data-val="AL DÍA">Al día</button>
+      <div class="seg seg-5" id="f_status_seg">
+        <button type="button" data-val="QUIERO VER">Quiero verla</button>
         <button type="button" data-val="PENDIENTE">Pendiente</button>
+        <button type="button" data-val="AL DÍA">Al día</button>
         <button type="button" data-val="TERMINADA">Terminada</button>
         <button type="button" data-val="LA DEJO">La dejo</button>
       </div>
@@ -631,12 +714,41 @@
       </div>
     </div>
     <div class="quick-panel" id="quickStatusPanel" style="display:none;">
-      <div class="qa-btn qa-status-opt" data-val="AL DÍA">Al día</div>
+      <div class="qa-btn qa-status-opt" data-val="QUIERO VER">Quiero verla</div>
       <div class="qa-btn qa-status-opt" data-val="PENDIENTE">Pendiente</div>
+      <div class="qa-btn qa-status-opt" data-val="AL DÍA">Al día</div>
       <div class="qa-btn qa-status-opt" data-val="TERMINADA">Terminada</div>
       <div class="qa-btn qa-status-opt" data-val="LA DEJO">La dejo</div>
       <div class="qa-btn" id="qaStatusBack" style="color:var(--text-faint);">← Volver</div>
     </div>
+  </div>
+</div>
+
+<!-- ===== Sheet: Historial de copias de seguridad ===== -->
+<div class="sheet-overlay" id="backupsOverlay"></div>
+<div class="sheet" id="backupsSheet">
+  <div class="sheet-handle"></div>
+  <div class="sheet-head">
+    <h3>Copias de seguridad</h3>
+    <div class="sheet-close" id="backupsClose">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </div>
+  </div>
+  <div class="sheet-body">
+    <div id="backupsList"></div>
+  </div>
+</div>
+
+<!-- ===== Wrapped anual ===== -->
+<div class="wrapped-overlay" id="wrappedOverlay">
+  <div class="wrapped-close" id="wrappedClose">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+  </div>
+  <div class="wrapped-dots" id="wrappedDots"></div>
+  <div class="wrapped-slides" id="wrappedSlides"></div>
+  <div class="wrapped-nav">
+    <div class="wrapped-tap-zone" id="wrappedPrevZone"></div>
+    <div class="wrapped-tap-zone" id="wrappedNextZone"></div>
   </div>
 </div>
 
@@ -664,6 +776,14 @@
       <div><div>Importar (Excel o JSON)</div><div class="desc">Sustituye la bitácora actual por el archivo seleccionado</div></div>
     </div>
     <input type="file" id="importFile" accept=".xlsx,.xls,.json" style="display:none">
+    <div class="menu-item" id="backupsBtn">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8v4l3 3"/><circle cx="12" cy="12" r="9"/></svg>
+      <div><div>Copias de seguridad automáticas</div><div class="desc">Se guardan solas al abrir la app (últimas 10, sin carátulas)</div></div>
+    </div>
+    <div class="menu-item" id="wrappedPreviewBtn">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l2.9 6.6 7.1.6-5.4 4.7 1.6 7-6.2-3.9L6 21l1.6-7L2.2 9.2l7.1-.6z"/></svg>
+      <div><div>Vista previa del Wrapped</div><div class="desc">El resumen del año se muestra automáticamente entre el 26 y 31 de diciembre</div></div>
+    </div>
     <div class="menu-item danger" id="resetBtn">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
       <div><div>Restaurar datos originales</div><div class="desc">Vuelve a las 82 series del Excel maestro. Se perderán los cambios.</div></div>
@@ -671,9 +791,21 @@
     <div class="menu-note" style="border-top:1px solid var(--line-soft); padding-top:14px; margin-top:10px;">
       <div style="font-weight:700; color:var(--text-dim); font-size:12.5px; margin-bottom:6px;">Conexión con Trakt.tv</div>
       <div style="margin-bottom:8px;">Pega aquí tu Client ID (gratis, se crea en <a href="https://trakt.tv/oauth/applications/new" target="_blank" style="color:var(--green);">trakt.tv/oauth/applications</a>, como app "API" cualquier nombre, redirect urn:ietf:wg:oauth:2.0:oob).</div>
-      <div class="field-row" style="margin-bottom:0;">
+      <div class="field-row" style="margin-bottom:10px;">
         <input type="text" id="traktClientId" placeholder="Client ID de Trakt" style="background:var(--surface); border:1px solid var(--line); border-radius:11px; padding:10px 12px; color:var(--text); font-size:13px; flex:1;">
         <button class="btn btn-primary" id="saveTraktId" style="width:auto; padding:0 16px;">Guardar</button>
+      </div>
+      <div class="toggle-row" id="autoSyncRow">
+        <span>Sincronizar solo automáticamente al abrir (1 vez/día)</span>
+        <div class="toggle-switch" id="autoSyncToggle"><div class="knob"></div></div>
+      </div>
+    </div>
+    <div class="menu-note" style="border-top:1px solid var(--line-soft); padding-top:14px; margin-top:10px;">
+      <div style="font-weight:700; color:var(--text-dim); font-size:12.5px; margin-bottom:6px;">Notificaciones de estrenos</div>
+      <div style="margin-bottom:8px;">Si el día del estreno tienes la app abierta (o la abres ese día), puede avisarte con una notificación del propio navegador. No es un aviso push real en segundo plano — solo funciona si abres la app.</div>
+      <div class="toggle-row" id="notifRow">
+        <span>Activar notificaciones</span>
+        <div class="toggle-switch" id="notifToggle"><div class="knob"></div></div>
       </div>
     </div>
     <div class="menu-note">Los distintivos de plataforma usan el nombre y color de marca de cada servicio; no reproducen el logotipo oficial exacto (son propiedad de cada compañía). Si me pasas los ficheros de logo reales, los puedo incrustar tal cual.</div>
@@ -710,8 +842,8 @@ function enrichKnownPremieres(){
   if(changed) saveData();
 }
 
-const STATUS_COLOR = { 'AL DÍA':'#27C46A', 'PENDIENTE':'#E8B84B', 'TERMINADA':'#8A938A', 'LA DEJO':'#E2555F' };
-const STATUS_LABEL = { 'AL DÍA':'Al día', 'PENDIENTE':'Pendiente', 'TERMINADA':'Terminada', 'LA DEJO':'La dejo' };
+const STATUS_COLOR = { 'AL DÍA':'#27C46A', 'PENDIENTE':'#E8B84B', 'TERMINADA':'#8A938A', 'LA DEJO':'#E2555F', 'QUIERO VER':'#5B8DEF' };
+const STATUS_LABEL = { 'AL DÍA':'Al día', 'PENDIENTE':'Pendiente', 'TERMINADA':'Terminada', 'LA DEJO':'La dejo', 'QUIERO VER':'Quiero verla' };
 
 /* Distintivos de plataforma: nombre + color de marca real, sin reproducir el logotipo oficial */
 const PLATFORM_STYLE = {
@@ -740,15 +872,17 @@ let searchQuery = '';
 /* ---------- IndexedDB: almacén de carátulas (mucha más capacidad que localStorage) ---------- */
 const IDB_NAME = 'series_db_covers';
 const IDB_STORE = 'covers';
+const IDB_BACKUP_STORE = 'backups';
 let idbPromise = null;
 function openCoverDB(){
   if(idbPromise) return idbPromise;
   idbPromise = new Promise((resolve, reject)=>{
     if(!window.indexedDB){ reject(new Error('IndexedDB no disponible')); return; }
-    const req = indexedDB.open(IDB_NAME, 1);
+    const req = indexedDB.open(IDB_NAME, 2);
     req.onupgradeneeded = ()=>{
       const db = req.result;
       if(!db.objectStoreNames.contains(IDB_STORE)) db.createObjectStore(IDB_STORE);
+      if(!db.objectStoreNames.contains(IDB_BACKUP_STORE)) db.createObjectStore(IDB_BACKUP_STORE);
     };
     req.onsuccess = ()=> resolve(req.result);
     req.onerror = ()=> reject(req.error);
@@ -817,6 +951,101 @@ async function idbGetAllCovers(){
     });
   }catch(e){ console.error('idbGetAllCovers', e); return {}; }
 }
+
+/* ---------- Copias de seguridad automáticas (metadatos, sin carátulas) ---------- */
+async function idbSaveBackup(){
+  const db = await openCoverDB();
+  return new Promise((resolve,reject)=>{
+    const tx = db.transaction(IDB_BACKUP_STORE,'readwrite');
+    const ts = Date.now();
+    tx.objectStore(IDB_BACKUP_STORE).put({ ts, series: DATA }, ts);
+    tx.oncomplete = ()=>resolve(ts);
+    tx.onerror = ()=>reject(tx.error);
+  });
+}
+async function idbGetAllBackups(){
+  try{
+    const db = await openCoverDB();
+    return new Promise((resolve,reject)=>{
+      const tx = db.transaction(IDB_BACKUP_STORE,'readonly');
+      const store = tx.objectStore(IDB_BACKUP_STORE);
+      const result = [];
+      const req = store.openCursor();
+      req.onsuccess = (e)=>{
+        const cursor = e.target.result;
+        if(cursor){ result.push(cursor.value); cursor.continue(); }
+        else resolve(result.sort((a,b)=>b.ts-a.ts));
+      };
+      req.onerror = ()=>reject(req.error);
+    });
+  }catch(e){ console.error('idbGetAllBackups', e); return []; }
+}
+async function idbDeleteBackup(ts){
+  const db = await openCoverDB();
+  return new Promise((resolve,reject)=>{
+    const tx = db.transaction(IDB_BACKUP_STORE,'readwrite');
+    tx.objectStore(IDB_BACKUP_STORE).delete(ts);
+    tx.oncomplete = ()=>resolve();
+    tx.onerror = ()=>reject(tx.error);
+  });
+}
+async function pruneOldBackups(keepN){
+  const all = await idbGetAllBackups();
+  if(all.length <= keepN) return;
+  for(const b of all.slice(keepN)){ await idbDeleteBackup(b.ts); }
+}
+async function autoBackupIfNeeded(){
+  try{
+    const all = await idbGetAllBackups();
+    const last = all[0];
+    const now = Date.now();
+    if(!last || (now - last.ts) > 12*60*60*1000){
+      await idbSaveBackup();
+      await pruneOldBackups(10);
+    }
+  }catch(e){ console.error('autoBackupIfNeeded error', e); }
+}
+function fmtBackupDate(ts){
+  const d = new Date(ts);
+  return d.toLocaleDateString('es-ES', { day:'2-digit', month:'short', year:'numeric' }) + ' · ' + d.toLocaleTimeString('es-ES', { hour:'2-digit', minute:'2-digit' });
+}
+async function openBackupsSheet(){
+  const backups = await idbGetAllBackups();
+  const list = document.getElementById('backupsList');
+  if(!backups.length){
+    list.innerHTML = `<div class="empty-state"><div class="em">🗄️</div>Aún no hay copias automáticas guardadas.<br>Se crean solas cada vez que abres la app (máx. cada 12h).</div>`;
+  } else {
+    list.innerHTML = backups.map(b=>`
+      <div class="backup-row" data-ts="${b.ts}">
+        <div class="backup-info">
+          <div class="backup-date">${fmtBackupDate(b.ts)}</div>
+          <div class="backup-meta">${b.series.length} series</div>
+        </div>
+        <button class="btn btn-ghost backup-restore-btn" data-ts="${b.ts}" style="width:auto; padding:8px 14px; font-size:12px;">Restaurar</button>
+      </div>`).join('');
+    list.querySelectorAll('.backup-restore-btn').forEach(btn=>{
+      btn.addEventListener('click', async ()=>{
+        const ts = Number(btn.dataset.ts);
+        const b = backups.find(x=>x.ts===ts);
+        if(!b) return;
+        if(confirm(`¿Restaurar la copia del ${fmtBackupDate(ts)}? Se sustituirán tus datos actuales (las carátulas no se ven afectadas).`)){
+          DATA = JSON.parse(JSON.stringify(b.series));
+          saveData();
+          renderHome();
+          if(currentView==='list'){ renderStatusFilterRow(); renderPlatformFilterRow(); renderGenreFilterRow(); renderSeriesGrid(); }
+          if(currentView==='premieres') renderPremieres();
+          if(currentView==='watchlist') renderWatchlist();
+          closeBackupsSheet();
+          closeMenu();
+          toast('Copia restaurada');
+        }
+      });
+    });
+  }
+  backupsOverlay.classList.add('show');
+  backupsSheet.classList.add('show');
+}
+function closeBackupsSheet(){ backupsOverlay.classList.remove('show'); backupsSheet.classList.remove('show'); }
 
 /* ---------- Persistence (datos de texto en localStorage, carátulas en IndexedDB) ---------- */
 function loadData(){
@@ -934,7 +1163,7 @@ function posterCard(s, gridMode){
   </div>`;
 }
 function attachCardEvents(container){
-  container.querySelectorAll('.poster-card').forEach(el=>{
+  container.querySelectorAll('.poster-card, .compact-row').forEach(el=>{
     el.addEventListener('click', ()=>openQuickActions(el.dataset.id));
   });
 }
@@ -951,7 +1180,7 @@ function renderDashboard(){
   document.getElementById('statCaps').textContent = totalCaps;
   document.getElementById('statNota').textContent = avgNota.toFixed(1);
 
-  const statuses = ['AL DÍA','PENDIENTE','TERMINADA','LA DEJO'];
+  const statuses = ['QUIERO VER','PENDIENTE','AL DÍA','TERMINADA','LA DEJO'];
   document.getElementById('statusChips').innerHTML = statuses.map(st=>{
     const items = DATA.filter(s=>s.status===st);
     const mins = items.reduce((a,s)=>a+minutosDe(s),0);
@@ -1049,6 +1278,39 @@ function renderPremieres(){
   });
   renderUnmatchedPanel();
 }
+
+/* ---------- Por ver (lista de espera) ---------- */
+function renderWatchlist(){
+  const items = DATA.filter(s=>s.status==='QUIERO VER').sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));
+  document.getElementById('watchlistSub').textContent = items.length
+    ? `${items.length} serie${items.length===1?'':'s'} en espera`
+    : 'Aún no tienes ninguna serie en la lista de espera';
+  const container = document.getElementById('watchlistList');
+  if(!items.length){
+    container.innerHTML = `<div class="empty-state"><div class="em">🔖</div>Añade aquí las series que quieres ver<br>pero todavía no has empezado.</div>`;
+    return;
+  }
+  container.innerHTML = items.map(s=>{
+    const ps = platStyle(s.plataforma);
+    return `
+    <div class="premiere-row" data-id="${s.id}">
+      <div class="premiere-date" style="background:rgba(91,141,239,0.12); border-color:rgba(91,141,239,0.3); color:#5B8DEF;">
+        ${STAR_SVG.replace('currentColor','#5B8DEF')}
+      </div>
+      <div class="premiere-body">
+        <div class="premiere-title">${escapeHtml(s.serie)}</div>
+        <div class="premiere-meta">
+          <span class="plat-chip-inline" style="background:${ps.bg}; color:${ps.fg}; font-size:9px; font-weight:700; padding:2px 6px; border-radius:6px;">${ps.label}</span>
+          <span class="premiere-manual-tag">${s.genero}</span>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+  container.querySelectorAll('.premiere-row').forEach(row=>{
+    row.addEventListener('click', ()=>openQuickActions(row.dataset.id));
+  });
+}
+
 function renderUnmatchedPanel(){
   const panel = document.getElementById('premieresUnmatched');
   const unmatched = DATA.filter(s=>(s.status==='AL DÍA'||s.status==='PENDIENTE') && s.traktStatus==='not_found');
@@ -1065,6 +1327,184 @@ function renderUnmatchedPanel(){
 const TRAKT_KEY = 'trakt_client_id';
 function getTraktClientId(){ return localStorage.getItem(TRAKT_KEY) || ''; }
 function sleep(ms){ return new Promise(r=>setTimeout(r, ms)); }
+
+/* ---------- Registro de actividad (para el Wrapped futuro) ---------- */
+function getActivityLog(){
+  try{ return JSON.parse(localStorage.getItem('activity_log')||'[]'); }catch(e){ return []; }
+}
+function logActivity(id, action){
+  const log = getActivityLog();
+  log.push({ ts: Date.now(), id, action });
+  if(log.length > 5000) log.splice(0, log.length-5000);
+  localStorage.setItem('activity_log', JSON.stringify(log));
+}
+
+/* ---------- Wrapped anual ---------- */
+function isWrappedSeason(){
+  const now = new Date();
+  return now.getMonth()===11 && now.getDate()>=26;
+}
+function computeWrapped(year){
+  const log = getActivityLog().filter(e=> new Date(e.ts).getFullYear()===year && e.action==='capitulo');
+  const hasYearData = log.length >= 5;
+
+  const topRated = DATA.length ? [...DATA].sort((a,b)=>b.nota-a.nota)[0] : null;
+  const topTime = DATA.length ? [...DATA].sort((a,b)=>minutosDe(b)-minutosDe(a))[0] : null;
+  const platCounts = {}; DATA.forEach(s=>{ platCounts[s.plataforma]=(platCounts[s.plataforma]||0)+1; });
+  const topPlatEntry = Object.entries(platCounts).sort((a,b)=>b[1]-a[1])[0] || null;
+  const genCounts = {}; DATA.forEach(s=>{ genCounts[s.genero]=(genCounts[s.genero]||0)+1; });
+  const topGenEntry = Object.entries(genCounts).sort((a,b)=>b[1]-a[1])[0] || null;
+  const totalMinutesAll = DATA.reduce((a,s)=>a+minutosDe(s),0);
+  const totalCapsAll = DATA.reduce((a,s)=>a+(s.capsVistos||0),0);
+
+  return {
+    year, hasYearData, activityCount: log.length,
+    topRated, topTime, topPlatEntry, topGenEntry,
+    totalMinutesAll, totalCapsAll, totalSeries: DATA.length,
+  };
+}
+let wrappedSlideIndex = 0;
+let wrappedSlideCount = 0;
+let wrappedAutoTimer = null;
+function buildWrappedSlides(data, preview){
+  const slides = [];
+  const bgFor = (s)=> s && coverCache[s.id] ? `background-image:url('${coverCache[s.id]}')` : `background:${s?posterGradient(s):'linear-gradient(160deg,#111,#000)'}`;
+
+  slides.push(`
+    <div class="wrapped-slide">
+      <div class="wbg" style="background:radial-gradient(circle at 50% 30%, rgba(39,196,106,0.35), #000 70%);"></div>
+      <div class="wshade"></div>
+      <div class="wcontent">
+        <div class="wrapped-eyebrow">${preview ? 'Vista previa · ' : ''}Tu ${data.year} en Series_db</div>
+        <div class="wrapped-big-num">${fmtMinutesShort(data.totalMinutesAll)}</div>
+        <div class="wrapped-sub">vistas en total, repartidas en ${data.totalSeries} series</div>
+      </div>
+    </div>`);
+
+  if(data.topRated){
+    const s = data.topRated;
+    slides.push(`
+      <div class="wrapped-slide">
+        <div class="wbg" style="${bgFor(s)}; background-size:cover; background-position:center; filter:blur(2px) brightness(0.6);"></div>
+        <div class="wshade"></div>
+        <div class="wcontent">
+          <div class="wrapped-eyebrow">Tu serie mejor valorada</div>
+          <div class="wrapped-cover" style="${bgFor(s)}; background-size:cover; background-position:center;"></div>
+          <div class="wrapped-title">${escapeHtml(s.serie)}</div>
+          <div class="wrapped-sub">${starsHtml(s.nota)} · ${Number(s.nota).toFixed(1)}</div>
+        </div>
+      </div>`);
+  }
+
+  if(data.topTime){
+    const s = data.topTime;
+    slides.push(`
+      <div class="wrapped-slide">
+        <div class="wbg" style="${bgFor(s)}; background-size:cover; background-position:center; filter:blur(2px) brightness(0.6);"></div>
+        <div class="wshade"></div>
+        <div class="wcontent">
+          <div class="wrapped-eyebrow">Donde más tiempo has invertido</div>
+          <div class="wrapped-cover" style="${bgFor(s)}; background-size:cover; background-position:center;"></div>
+          <div class="wrapped-title">${escapeHtml(s.serie)}</div>
+          <div class="wrapped-sub">${fmtMinutesShort(minutosDe(s))} · ${s.capsVistos} capítulos</div>
+        </div>
+      </div>`);
+  }
+
+  if(data.topPlatEntry){
+    const [p,c] = data.topPlatEntry;
+    const ps = platStyle(p);
+    slides.push(`
+      <div class="wrapped-slide">
+        <div class="wbg" style="background:linear-gradient(160deg, ${ps.bg}33, #000 75%);"></div>
+        <div class="wshade"></div>
+        <div class="wcontent">
+          <div class="wrapped-eyebrow">Tu plataforma favorita</div>
+          <div class="wrapped-title">${ps.label}</div>
+          <div class="wrapped-chip" style="background:${ps.bg}; color:${ps.fg};">${c} serie${c===1?'':'s'}</div>
+        </div>
+      </div>`);
+  }
+
+  if(data.topGenEntry){
+    const [g,c] = data.topGenEntry;
+    slides.push(`
+      <div class="wrapped-slide">
+        <div class="wbg" style="background:radial-gradient(circle at 50% 30%, rgba(140,239,184,0.25), #000 70%);"></div>
+        <div class="wshade"></div>
+        <div class="wcontent">
+          <div class="wrapped-eyebrow">Tu género favorito</div>
+          <div class="wrapped-title">${g}</div>
+          <div class="wrapped-sub">${c} serie${c===1?'':'s'} de este género en tu bitácora</div>
+        </div>
+      </div>`);
+  }
+
+  slides.push(`
+    <div class="wrapped-slide">
+      <div class="wbg" style="background:linear-gradient(160deg,#0E4A2A,#000 70%);"></div>
+      <div class="wshade"></div>
+      <div class="wcontent">
+        <div class="wrapped-eyebrow">Resumen</div>
+        <div class="wrapped-title">${data.totalSeries} series</div>
+        <div class="wrapped-sub">${data.totalCapsAll} capítulos · ${fmtMinutesShort(data.totalMinutesAll)}</div>
+        ${!data.hasYearData ? `<div class="wrapped-sub" style="margin-top:14px; opacity:0.7;">Desde ahora guardo tu actividad para que el próximo Wrapped sea aún más preciso, capítulo a capítulo.</div>` : ''}
+      </div>
+    </div>`);
+
+  return slides;
+}
+function openWrapped(preview){
+  const year = new Date().getFullYear();
+  const data = computeWrapped(year);
+  const slides = buildWrappedSlides(data, preview);
+  wrappedSlideCount = slides.length;
+  wrappedSlideIndex = 0;
+  document.getElementById('wrappedSlides').innerHTML = slides.map((html,i)=>html.replace('wrapped-slide','wrapped-slide'+(i===0?' active':''))).join('');
+  document.getElementById('wrappedDots').innerHTML = slides.map(()=>`<div class="d"><div class="f"></div></div>`).join('');
+  wrappedOverlay.classList.add('show');
+  goToWrappedSlide(0);
+}
+function goToWrappedSlide(i){
+  clearTimeout(wrappedAutoTimer);
+  const slides = document.querySelectorAll('.wrapped-slide');
+  const dots = document.querySelectorAll('.wrapped-dots .d');
+  if(i >= slides.length){ closeWrapped(); return; }
+  if(i < 0) i = 0;
+  wrappedSlideIndex = i;
+  slides.forEach((el,idx)=>el.classList.toggle('active', idx===i));
+  dots.forEach((el,idx)=>{
+    el.classList.toggle('done', idx<i);
+    el.classList.toggle('active', idx===i);
+  });
+  wrappedAutoTimer = setTimeout(()=>goToWrappedSlide(i+1), 5000);
+}
+function closeWrapped(){
+  clearTimeout(wrappedAutoTimer);
+  wrappedOverlay.classList.remove('show');
+  if(!wrappedIsPreview){
+    localStorage.setItem('wrapped_shown_'+new Date().getFullYear(), '1');
+  }
+}
+let wrappedIsPreview = false;
+const wrappedOverlay = document.getElementById('wrappedOverlay');
+document.getElementById('wrappedClose').addEventListener('click', closeWrapped);
+document.getElementById('wrappedPrevZone').addEventListener('click', ()=>goToWrappedSlide(wrappedSlideIndex-1));
+document.getElementById('wrappedNextZone').addEventListener('click', ()=>goToWrappedSlide(wrappedSlideIndex+1));
+document.getElementById('wrappedPreviewBtn').addEventListener('click', ()=>{
+  closeMenu();
+  wrappedIsPreview = true;
+  openWrapped(true);
+});
+function maybeAutoShowWrapped(){
+  const year = new Date().getFullYear();
+  if(isWrappedSeason() && localStorage.getItem('wrapped_shown_'+year) !== '1'){
+    wrappedIsPreview = false;
+    openWrapped(false);
+  }
+}
+
+
 
 async function traktFetch(path, clientId){
   const res = await fetch('https://api.trakt.tv'+path, {
@@ -1152,10 +1592,89 @@ document.getElementById('saveTraktId').addEventListener('click', ()=>{
   toast('Client ID de Trakt guardado');
 });
 
+/* ---------- Toggles: sync automático y notificaciones ---------- */
+function isAutoSyncEnabled(){ return localStorage.getItem('trakt_auto_sync') !== '0'; } // activado por defecto
+function isNotifEnabled(){ return localStorage.getItem('notifications_enabled') === '1'; }
+function refreshToggleUI(){
+  document.getElementById('autoSyncToggle').classList.toggle('on', isAutoSyncEnabled());
+  document.getElementById('notifToggle').classList.toggle('on', isNotifEnabled() && (('Notification' in window) && Notification.permission==='granted'));
+}
+document.getElementById('autoSyncToggle').addEventListener('click', ()=>{
+  const enabled = !isAutoSyncEnabled();
+  localStorage.setItem('trakt_auto_sync', enabled ? '1' : '0');
+  refreshToggleUI();
+});
+document.getElementById('notifToggle').addEventListener('click', async ()=>{
+  if(!('Notification' in window)){ toast('Este navegador no soporta notificaciones'); return; }
+  const turningOn = !isNotifEnabled();
+  if(turningOn){
+    const perm = await Notification.requestPermission();
+    if(perm !== 'granted'){ toast('Permiso de notificaciones denegado'); localStorage.setItem('notifications_enabled','0'); refreshToggleUI(); return; }
+    localStorage.setItem('notifications_enabled','1');
+    toast('Notificaciones activadas');
+    checkPremiereNotifications();
+  } else {
+    localStorage.setItem('notifications_enabled','0');
+    toast('Notificaciones desactivadas');
+  }
+  refreshToggleUI();
+});
+
+function getNotifiedSet(){
+  try{ return new Set(JSON.parse(localStorage.getItem('notified_premieres')||'[]')); }catch(e){ return new Set(); }
+}
+function saveNotifiedSet(set){ localStorage.setItem('notified_premieres', JSON.stringify([...set])); }
+function checkPremiereNotifications(){
+  if(!isNotifEnabled()) return;
+  if(!('Notification' in window) || Notification.permission !== 'granted') return;
+  const hoy = new Date(); hoy.setHours(0,0,0,0);
+  const notified = getNotifiedSet();
+  let changed = false;
+  DATA.forEach(s=>{
+    if(!s.estrenoFecha) return;
+    const d = new Date(s.estrenoFecha+'T00:00:00');
+    if(isNaN(d)) return;
+    const diffDays = Math.round((d-hoy)/86400000);
+    const key = s.id+'_'+s.estrenoFecha;
+    if(diffDays===0 && !notified.has(key)){
+      try{
+        new Notification('Se estrena hoy: '+s.serie, { body: s.estrenoNota || 'Nueva temporada disponible', icon:'icons/icon-192.png' });
+      }catch(e){ console.error('Notification error', e); }
+      notified.add(key);
+      changed = true;
+    }
+  });
+  if(changed) saveNotifiedSet(notified);
+}
+
+function shouldAutoSyncToday(){
+  const last = localStorage.getItem('trakt_last_sync_date');
+  const today = new Date().toISOString().slice(0,10);
+  return last !== today;
+}
+async function autoSyncTraktIfNeeded(){
+  if(!isAutoSyncEnabled()) return;
+  const clientId = getTraktClientId();
+  if(!clientId) return;
+  if(!shouldAutoSyncToday()) return;
+  const targets = DATA.filter(s=>s.status==='AL DÍA' || s.status==='PENDIENTE');
+  if(!targets.length){ localStorage.setItem('trakt_last_sync_date', new Date().toISOString().slice(0,10)); return; }
+  for(const s of targets){
+    await syncSeriesWithTrakt(s, clientId);
+    await sleep(200);
+  }
+  saveData();
+  localStorage.setItem('trakt_last_sync_date', new Date().toISOString().slice(0,10));
+  if(currentView==='premieres') renderPremieres();
+  checkPremiereNotifications();
+  const found = targets.filter(s=>s.traktStatus==='ok').length;
+  if(found) toast(`Sincronización automática: ${found} series actualizadas`);
+}
+
 /* ---------- Series (grid) ---------- */
 function renderStatusFilterRow(){
   const row = document.getElementById('statusFilterRow');
-  const statuses = ['TODAS','AL DÍA','PENDIENTE','TERMINADA','LA DEJO'];
+  const statuses = ['TODAS','QUIERO VER','PENDIENTE','AL DÍA','TERMINADA','LA DEJO'];
   row.innerHTML = statuses.map(st=>`<div class="fchip ${st===currentFilterStatus?'active':''}" data-status="${st}">${st==='TODAS'?'Todas':STATUS_LABEL[st]}</div>`).join('');
   row.querySelectorAll('.fchip').forEach(el=>{
     el.addEventListener('click', ()=>{ currentFilterStatus = el.dataset.status; renderSeriesGrid(); renderStatusFilterRow(); updateFilterDot(); });
@@ -1206,15 +1725,52 @@ function getFilteredSorted(){
   }
   return list;
 }
+let seriesViewMode = localStorage.getItem('series_view_mode') || 'grid';
+function compactRow(s){
+  const stColor = STATUS_COLOR[s.status] || '#8A938A';
+  const ps = platStyle(s.plataforma);
+  const cover = coverCache[s.id];
+  const thumbStyle = cover ? `background-image:url('${cover}');` : `background:${posterGradient(s)};`;
+  return `
+  <div class="compact-row" data-id="${s.id}">
+    <div class="compact-thumb" style="${thumbStyle}"><div class="dot" style="background:${stColor}"></div></div>
+    <div class="compact-body">
+      <div class="compact-title">${escapeHtml(s.serie)}</div>
+      <div class="compact-meta">
+        <span class="plat-chip-inline" style="background:${ps.bg}; color:${ps.fg}; font-size:9px; font-weight:700; padding:2px 6px; border-radius:6px;">${ps.label}</span>
+        <span class="premiere-manual-tag">${s.genero}</span>
+      </div>
+    </div>
+    <div class="compact-nota">${STAR_SVG.replace('currentColor','#8CEFB8')}${Number(s.nota).toFixed(1)}</div>
+  </div>`;
+}
+function updateViewToggleUI(){
+  document.querySelectorAll('.vt-btn').forEach(b=>b.classList.toggle('active', b.dataset.mode===seriesViewMode));
+  document.getElementById('seriesGrid').classList.toggle('compact-list-wrap', seriesViewMode==='compact');
+  document.getElementById('seriesGrid').classList.toggle('grid-wrap', seriesViewMode==='grid');
+}
+document.querySelectorAll('.vt-btn').forEach(b=>{
+  b.addEventListener('click', ()=>{
+    seriesViewMode = b.dataset.mode;
+    localStorage.setItem('series_view_mode', seriesViewMode);
+    updateViewToggleUI();
+    renderSeriesGrid();
+  });
+});
 function renderSeriesGrid(){
   const list = getFilteredSorted();
   document.getElementById('resultCount').textContent = `${list.length} serie${list.length===1?'':'s'}`;
   const container = document.getElementById('seriesGrid');
+  updateViewToggleUI();
   if(list.length === 0){
-    container.innerHTML = `<div class="empty-state" style="grid-column:1/-1;"><div class="em">🎬</div>No hay series que coincidan.<br>Prueba a cambiar el filtro o añade una nueva.</div>`;
+    container.innerHTML = `<div class="empty-state" style="${seriesViewMode==='grid'?'grid-column:1/-1;':''}"><div class="em">🎬</div>No hay series que coincidan.<br>Prueba a cambiar el filtro o añade una nueva.</div>`;
     return;
   }
-  container.innerHTML = list.map(s=>posterCard(s,true)).join('');
+  if(seriesViewMode==='compact'){
+    container.innerHTML = list.map(s=>compactRow(s)).join('');
+  } else {
+    container.innerHTML = list.map(s=>posterCard(s,true)).join('');
+  }
   attachCardEvents(container);
 }
 function incrementCap(id){
@@ -1236,14 +1792,21 @@ function switchView(view){
   document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
   document.getElementById('view-'+view).classList.add('active');
   document.querySelectorAll('.navbtn[data-view]').forEach(b=>b.classList.toggle('active', b.dataset.view===view));
-  document.getElementById('pageTitle').textContent = view==='home' ? 'Análisis' : (view==='list' ? 'Series' : 'Estrenos');
+  const titles = { home:'Análisis', list:'Series', premieres:'Estrenos', watchlist:'Por ver' };
+  document.getElementById('pageTitle').textContent = titles[view] || '';
   window.scrollTo(0,0);
   if(view==='list'){ renderStatusFilterRow(); renderPlatformFilterRow(); renderGenreFilterRow(); updateFilterDot(); renderSeriesGrid(); }
   if(view==='home') renderHome();
   if(view==='premieres') renderPremieres();
+  if(view==='watchlist') renderWatchlist();
 }
 document.querySelectorAll('.navbtn[data-view]').forEach(b=>b.addEventListener('click', ()=>switchView(b.dataset.view)));
 document.getElementById('addSeriesBtn').addEventListener('click', ()=>openEdit(null));
+document.getElementById('addWatchlistBtn').addEventListener('click', ()=>{
+  openEdit(null);
+  selectedStatus = 'QUIERO VER';
+  updateStatusSeg();
+});
 document.querySelectorAll('.see-all').forEach(el=>{
   el.addEventListener('click', ()=>{
     openRankSheet(el.dataset.sort, el.dataset.title);
@@ -1413,6 +1976,7 @@ function quickAddEpisode(id){
   if(!open){ toast('No hay temporada en curso — pulsa "+ Temporada" primero'); return; }
   open.capitulos++; open.vistos++;
   applyComputedFromTemporadas(s);
+  logActivity(s.id, 'capitulo');
   refreshAfterQuickAction();
   toast(`S${s.temporadas.indexOf(open)+1}: ${open.vistos} capítulos vistos`);
 }
@@ -1422,6 +1986,7 @@ function quickAddSeason(id){
   if(getOpenSeason(s)){ toast('Ya tienes una temporada en curso'); return; }
   s.temporadas.push({ capitulos:0, vistos:0, enCurso:true });
   applyComputedFromTemporadas(s);
+  logActivity(s.id, 'temporada');
   refreshAfterQuickAction();
   toast(`Temporada ${s.temporadas.length} iniciada`);
 }
@@ -1682,6 +2247,7 @@ const menuOverlay = document.getElementById('menuOverlay');
 const menuSheet = document.getElementById('menuSheet');
 document.getElementById('menuBtn').addEventListener('click', ()=>{
   document.getElementById('traktClientId').value = getTraktClientId();
+  refreshToggleUI();
   menuOverlay.classList.add('show'); menuSheet.classList.add('show');
 });
 document.getElementById('menuClose').addEventListener('click', closeMenu);
@@ -1697,6 +2263,13 @@ document.getElementById('resetBtn').addEventListener('click', ()=>{
     toast('Datos originales restaurados');
   }
 });
+
+/* ---------- Historial de copias de seguridad ---------- */
+const backupsOverlay = document.getElementById('backupsOverlay');
+const backupsSheet = document.getElementById('backupsSheet');
+document.getElementById('backupsBtn').addEventListener('click', ()=>{ openBackupsSheet(); });
+document.getElementById('backupsClose').addEventListener('click', closeBackupsSheet);
+backupsOverlay.addEventListener('click', (e)=>{ if(e.target===backupsOverlay) closeBackupsSheet(); });
 
 /* ---------- Export: Excel ---------- */
 document.getElementById('exportXlsx').addEventListener('click', ()=>{
@@ -1823,6 +2396,11 @@ idbGetAllCovers().then(covers=>{
   renderHome();
   if(currentView==='list') renderSeriesGrid();
 }).catch(err=>{ console.error('No se pudieron cargar las carátulas de IndexedDB', err); });
+
+autoBackupIfNeeded();
+autoSyncTraktIfNeeded();
+checkPremiereNotifications();
+maybeAutoShowWrapped();
 </script>
 </body>
 </html>
