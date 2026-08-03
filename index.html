@@ -192,7 +192,7 @@
   .premiere-manual-tag{ font-size:9px; font-weight:700; color:var(--text-faint); background:var(--surface-3); padding:2px 6px; border-radius:6px; }
   .premiere-badge{ flex-shrink:0; font-size:10.5px; font-weight:700; padding:4px 9px; border-radius:20px; background:rgba(30,154,84,0.14); color:var(--green); white-space:nowrap; }
   .premiere-badge.live{ background:rgba(232,184,75,0.16); color:var(--amber); }
-  #syncTraktBtn:disabled{ opacity:0.5; pointer-events:none; }
+  #syncTmdbBtn:disabled{ opacity:0.5; pointer-events:none; }
   .unmatched-panel{ margin:20px 16px 0; background:var(--surface); border:1px solid var(--line); border-radius:14px; padding:12px 14px; }
   .backup-row{ display:flex; align-items:center; justify-content:space-between; gap:10px; padding:12px 14px; background:var(--surface); border:1px solid var(--line); border-radius:12px; margin-bottom:8px; }
   .backup-date{ font-size:13.5px; font-weight:700; }
@@ -485,7 +485,7 @@
     <div class="toolbar">
       <div class="list-head">
         <h2>Estrenos</h2>
-        <button class="add-btn" id="syncTraktBtn" style="background:var(--surface-3); color:var(--text-dim);">
+        <button class="add-btn" id="syncTmdbBtn" style="background:var(--surface-3); color:var(--text-dim);">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 2v6h-6"/><path d="M3 12a9 9 0 0 1 15-6.7L21 8"/><path d="M3 22v-6h6"/><path d="M21 12a9 9 0 0 1-15 6.7L3 16"/></svg>
           Sincronizar
         </button>
@@ -554,8 +554,8 @@
       <input type="text" id="f_serie" placeholder="Nombre de la serie">
     </div>
     <div class="field">
-      <label>Título en Trakt (opcional)</label>
-      <input type="text" id="f_traktQuery" placeholder="Solo si el nombre en Trakt es distinto (ej. título original)">
+      <label>Título en TMDb (opcional)</label>
+      <input type="text" id="f_tmdbQuery" placeholder="Solo si el nombre en TMDb es distinto (ej. título original)">
     </div>
     <div class="field">
       <label>Carátula</label>
@@ -786,11 +786,11 @@
       <div><div>Restaurar datos originales</div><div class="desc">Vuelve a las 82 series del Excel maestro. Se perderán los cambios.</div></div>
     </div>
     <div class="menu-note" style="border-top:1px solid var(--line-soft); padding-top:14px; margin-top:10px;">
-      <div style="font-weight:700; color:var(--text-dim); font-size:12.5px; margin-bottom:6px;">Conexión con Trakt.tv</div>
-      <div style="margin-bottom:8px;">Pega aquí tu Client ID (gratis, se crea en <a href="https://trakt.tv/oauth/applications/new" target="_blank" style="color:var(--green);">trakt.tv/oauth/applications</a>, como app "API" cualquier nombre, redirect urn:ietf:wg:oauth:2.0:oob).</div>
+      <div style="font-weight:700; color:var(--text-dim); font-size:12.5px; margin-bottom:6px;">Conexión con TMDb</div>
+      <div style="margin-bottom:8px;">Pega aquí tu clave de API (gratis, se pide en <a href="https://www.themoviedb.org/settings/api" target="_blank" style="color:var(--green);">themoviedb.org/settings/api</a> — regístrate, "Request an API key", tipo "Developer", y usa la "API Key (v3 auth)" que te den).</div>
       <div class="field-row" style="margin-bottom:10px;">
-        <input type="text" id="traktClientId" placeholder="Client ID de Trakt" style="background:var(--surface); border:1px solid var(--line); border-radius:11px; padding:10px 12px; color:var(--text); font-size:13px; flex:1;">
-        <button class="btn btn-primary" id="saveTraktId" style="width:auto; padding:0 16px;">Guardar</button>
+        <input type="text" id="tmdbApiKey" placeholder="Clave de API de TMDb" style="background:var(--surface); border:1px solid var(--line); border-radius:11px; padding:10px 12px; color:var(--text); font-size:13px; flex:1;">
+        <button class="btn btn-primary" id="saveTmdbKey" style="width:auto; padding:0 16px;">Guardar</button>
       </div>
       <div class="toggle-row" id="autoSyncRow">
         <span>Sincronizar solo automáticamente al abrir (1 vez/día)</span>
@@ -1048,7 +1048,15 @@ function closeBackupsSheet(){ backupsOverlay.classList.remove('show'); backupsSh
 function loadData(){
   try{
     const raw = localStorage.getItem(STORAGE_KEY);
-    if(raw){ DATA = JSON.parse(raw); return; }
+    if(raw){
+      DATA = JSON.parse(raw);
+      let migrated = false;
+      DATA.forEach(s=>{
+        if(s.traktQuery && !s.tmdbQuery){ s.tmdbQuery = s.traktQuery; delete s.traktQuery; migrated = true; }
+      });
+      if(migrated) saveData();
+      return;
+    }
   }catch(e){ console.error(e); }
   seedFromOriginal();
 }
@@ -1307,19 +1315,19 @@ function renderWatchlist(){
 
 function renderUnmatchedPanel(){
   const panel = document.getElementById('premieresUnmatched');
-  const unmatched = DATA.filter(s=>(s.status==='AL DÍA'||s.status==='PENDIENTE') && s.traktStatus==='not_found');
+  const unmatched = DATA.filter(s=>(s.status==='AL DÍA'||s.status==='PENDIENTE') && s.tmdbStatus==='not_found');
   if(!unmatched.length){ panel.innerHTML=''; return; }
   panel.innerHTML = `
     <div class="unmatched-panel">
-      <h3>No encontradas en Trakt (${unmatched.length})</h3>
-      <div class="desc">Prueba a añadirles el título original en "Título en Trakt" al editarlas.</div>
+      <h3>No encontradas en TMDb (${unmatched.length})</h3>
+      <div class="desc">Prueba a añadirles el título original en "Título en TMDb" al editarlas.</div>
       ${unmatched.map(s=>`<span class="unmatched-chip">${escapeHtml(s.serie)}</span>`).join('')}
     </div>`;
 }
 
-/* ---------- Sincronización con Trakt.tv ---------- */
-const TRAKT_KEY = 'trakt_client_id';
-function getTraktClientId(){ return localStorage.getItem(TRAKT_KEY) || ''; }
+/* ---------- Sincronización con TMDb ---------- */
+const TMDB_KEY = 'tmdb_api_key';
+function getTmdbApiKey(){ return localStorage.getItem(TMDB_KEY) || ''; }
 function sleep(ms){ return new Promise(r=>setTimeout(r, ms)); }
 
 /* ---------- Registro de actividad (para el Wrapped futuro) ---------- */
@@ -1500,94 +1508,83 @@ function maybeAutoShowWrapped(){
 
 
 
-async function traktFetch(path, clientId){
-  const res = await fetch('https://api.trakt.tv'+path, {
-    headers: {
-      'Content-Type': 'application/json',
-      'trakt-api-version': '2',
-      'trakt-api-key': clientId
-    }
-  });
-  if(!res.ok) throw new Error('Trakt HTTP '+res.status);
+async function tmdbFetch(path, apiKey){
+  const sep = path.includes('?') ? '&' : '?';
+  const res = await fetch('https://api.themoviedb.org/3'+path+sep+'api_key='+encodeURIComponent(apiKey)+'&language=es-ES');
+  if(!res.ok) throw new Error('TMDb HTTP '+res.status);
   return res.json();
 }
 
-async function syncSeriesWithTrakt(s, clientId){
+async function syncSeriesWithTmdb(s, apiKey){
   if(s.estrenoOrigen === 'manual' && s.estrenoFecha){
-    s.traktStatus = 'skipped_manual';
+    s.tmdbStatus = 'skipped_manual';
     return;
   }
-  const query = s.traktQuery || s.serie;
+  const query = s.tmdbQuery || s.serie;
   try{
-    const results = await traktFetch('/search/show?query='+encodeURIComponent(query)+'&limit=1', clientId);
-    if(!results || !results.length){ s.traktStatus = 'not_found'; return; }
-    const slug = results[0].show.ids.slug;
-    await sleep(200);
+    const results = await tmdbFetch('/search/tv?query='+encodeURIComponent(query), apiKey);
+    if(!results || !results.results || !results.results.length){ s.tmdbStatus = 'not_found'; return; }
+    const tvId = results.results[0].id;
+    await sleep(120);
 
-    let nextEp = null;
-    try{ nextEp = await traktFetch('/shows/'+slug+'/next_episode?extended=full', clientId); }catch(e){ nextEp = null; }
-    await sleep(200);
+    const show = await tmdbFetch('/tv/'+tvId, apiKey);
+    const nextEp = show && show.next_episode_to_air;
 
-    if(nextEp && nextEp.first_aired){
-      const d = new Date(nextEp.first_aired);
-      s.estrenoFecha = d.toISOString().slice(0,10);
-      s.estrenoNota = `T${nextEp.season}E${nextEp.number}${nextEp.title ? ' · '+nextEp.title : ''} · vía Trakt`;
-      s.estrenoOrigen = 'trakt';
-      s.traktStatus = 'ok';
+    if(nextEp && nextEp.air_date){
+      s.estrenoFecha = nextEp.air_date;
+      s.estrenoNota = `T${nextEp.season_number}E${nextEp.episode_number}${nextEp.name ? ' · '+nextEp.name : ''} · vía TMDb`;
+      s.estrenoOrigen = 'tmdb';
+      s.tmdbStatus = 'ok';
+    } else if(show && (show.status === 'Returning Series' || show.status === 'In Production' || show.status === 'Planned')){
+      s.estrenoNota = 'Renovada, sin fecha confirmada aún (TMDb)';
+      s.estrenoOrigen = 'tmdb';
+      s.tmdbStatus = 'ok';
     } else {
-      let show = null;
-      try{ show = await traktFetch('/shows/'+slug+'?extended=full', clientId); }catch(e){ show = null; }
-      if(show && (show.status === 'returning series' || show.status === 'in production')){
-        s.estrenoNota = 'Renovada, sin fecha confirmada aún (Trakt)';
-        s.estrenoOrigen = 'trakt';
-        s.traktStatus = 'ok';
-      } else {
-        s.traktStatus = 'ok';
-      }
+      s.tmdbStatus = 'ok';
     }
   }catch(e){
-    console.error('Trakt sync error for', s.serie, e);
-    s.traktStatus = 'error';
+    console.error('TMDb sync error for', s.serie, e);
+    s.tmdbStatus = 'error';
   }
 }
 
-async function syncWithTrakt(){
-  const clientId = getTraktClientId();
-  if(!clientId){
-    toast('Primero configura tu Client ID de Trakt en el menú');
+async function syncWithTmdb(){
+  const apiKey = getTmdbApiKey();
+  if(!apiKey){
+    toast('Primero configura tu clave de TMDb en el menú');
     return;
   }
-  const btn = document.getElementById('syncTraktBtn');
+  const btn = document.getElementById('syncTmdbBtn');
   const targets = DATA.filter(s=>s.status==='AL DÍA' || s.status==='PENDIENTE');
   btn.disabled = true;
   const originalHtml = btn.innerHTML;
   let done = 0;
   for(const s of targets){
     btn.innerHTML = `Sincronizando ${done+1}/${targets.length}…`;
-    await syncSeriesWithTrakt(s, clientId);
+    await syncSeriesWithTmdb(s, apiKey);
     done++;
-    await sleep(250);
+    await sleep(120);
   }
   saveData();
   btn.disabled = false;
   btn.innerHTML = originalHtml;
   renderPremieres();
-  const found = targets.filter(s=>s.traktStatus==='ok').length;
-  const notFound = targets.filter(s=>s.traktStatus==='not_found').length;
-  const skippedManual = targets.filter(s=>s.traktStatus==='skipped_manual').length;
+  const found = targets.filter(s=>s.tmdbStatus==='ok').length;
+  const notFound = targets.filter(s=>s.tmdbStatus==='not_found').length;
+  const skippedManual = targets.filter(s=>s.tmdbStatus==='skipped_manual').length;
   toast(`Sincronizado: ${found} actualizadas, ${skippedManual} con fecha manual (sin tocar), ${notFound} sin identificar`);
 }
-document.getElementById('syncTraktBtn').addEventListener('click', syncWithTrakt);
+document.getElementById('syncTmdbBtn').addEventListener('click', syncWithTmdb);
 
-document.getElementById('saveTraktId').addEventListener('click', ()=>{
-  const val = document.getElementById('traktClientId').value.trim();
+document.getElementById('saveTmdbKey').addEventListener('click', ()=>{
+  const val = document.getElementById('tmdbApiKey').value.trim();
   if(!val){ toast('Pega primero tu Client ID'); return; }
-  localStorage.setItem(TRAKT_KEY, val);
-  toast('Client ID de Trakt guardado');
+  localStorage.setItem(TMDB_KEY, val);
+  toast('Clave de TMDb guardada');
 });
 
 /* ---------- Toggles: sync automático y notificaciones ---------- */
-function isAutoSyncEnabled(){ return localStorage.getItem('trakt_auto_sync') !== '0'; } // activado por defecto
+function isAutoSyncEnabled(){ return localStorage.getItem('sync_auto_enabled') !== '0'; } // activado por defecto
 function isNotifEnabled(){ return localStorage.getItem('notifications_enabled') === '1'; }
 function refreshToggleUI(){
   document.getElementById('autoSyncToggle').classList.toggle('on', isAutoSyncEnabled());
@@ -1595,7 +1592,7 @@ function refreshToggleUI(){
 }
 document.getElementById('autoSyncToggle').addEventListener('click', ()=>{
   const enabled = !isAutoSyncEnabled();
-  localStorage.setItem('trakt_auto_sync', enabled ? '1' : '0');
+  localStorage.setItem('sync_auto_enabled', enabled ? '1' : '0');
   refreshToggleUI();
 });
 document.getElementById('notifToggle').addEventListener('click', async ()=>{
@@ -1642,26 +1639,26 @@ function checkPremiereNotifications(){
 }
 
 function shouldAutoSyncToday(){
-  const last = localStorage.getItem('trakt_last_sync_date');
+  const last = localStorage.getItem('tmdb_last_sync_date');
   const today = new Date().toISOString().slice(0,10);
   return last !== today;
 }
-async function autoSyncTraktIfNeeded(){
+async function autoSyncTmdbIfNeeded(){
   if(!isAutoSyncEnabled()) return;
-  const clientId = getTraktClientId();
+  const clientId = getTmdbApiKey();
   if(!clientId) return;
   if(!shouldAutoSyncToday()) return;
   const targets = DATA.filter(s=>s.status==='AL DÍA' || s.status==='PENDIENTE');
-  if(!targets.length){ localStorage.setItem('trakt_last_sync_date', new Date().toISOString().slice(0,10)); return; }
+  if(!targets.length){ localStorage.setItem('tmdb_last_sync_date', new Date().toISOString().slice(0,10)); return; }
   for(const s of targets){
-    await syncSeriesWithTrakt(s, clientId);
+    await syncSeriesWithTmdb(s, clientId);
     await sleep(200);
   }
   saveData();
-  localStorage.setItem('trakt_last_sync_date', new Date().toISOString().slice(0,10));
+  localStorage.setItem('tmdb_last_sync_date', new Date().toISOString().slice(0,10));
   if(currentView==='premieres') renderPremieres();
   checkPremiereNotifications();
-  const found = targets.filter(s=>s.traktStatus==='ok').length;
+  const found = targets.filter(s=>s.tmdbStatus==='ok').length;
   if(found) toast(`Sincronización automática: ${found} series actualizadas`);
 }
 
@@ -1865,7 +1862,7 @@ function openEdit(id){
   document.getElementById('f_duracionCap').value = s ? s.duracionCap : 45;
   document.getElementById('f_repeticiones').value = s ? (s.repeticiones||1) : 1;
   document.getElementById('f_estrenoFecha').value = s ? (s.estrenoFecha||'') : '';
-  document.getElementById('f_traktQuery').value = s ? (s.traktQuery||'') : '';
+  document.getElementById('f_tmdbQuery').value = s ? (s.tmdbQuery||'') : '';
   document.getElementById('f_estrenoNota').value = s ? (s.estrenoNota||'') : '';
   updateCalcPreview();
 
@@ -2184,7 +2181,7 @@ document.getElementById('saveBtn').addEventListener('click', async ()=>{
     fechaNext: nuevaFecha ? 'SI' : '',
     estrenoFecha: nuevaFecha,
     estrenoNota: nuevaNota,
-    traktQuery: document.getElementById('f_traktQuery').value.trim(),
+    tmdbQuery: document.getElementById('f_tmdbQuery').value.trim(),
   };
 
   let targetId = editingId;
@@ -2240,7 +2237,7 @@ document.getElementById('sortSelect').addEventListener('change', (e)=>{ currentS
 const menuOverlay = document.getElementById('menuOverlay');
 const menuSheet = document.getElementById('menuSheet');
 document.getElementById('menuBtn').addEventListener('click', ()=>{
-  document.getElementById('traktClientId').value = getTraktClientId();
+  document.getElementById('tmdbApiKey').value = getTmdbApiKey();
   refreshToggleUI();
   menuOverlay.classList.add('show'); menuSheet.classList.add('show');
 });
@@ -2392,7 +2389,7 @@ idbGetAllCovers().then(covers=>{
 }).catch(err=>{ console.error('No se pudieron cargar las carátulas de IndexedDB', err); });
 
 autoBackupIfNeeded();
-autoSyncTraktIfNeeded();
+autoSyncTmdbIfNeeded();
 checkPremiereNotifications();
 maybeAutoShowWrapped();
 </script>
