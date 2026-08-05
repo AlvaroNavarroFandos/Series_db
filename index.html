@@ -72,8 +72,8 @@
 
   /* ---------- Dashboard hero (stats) ---------- */
   .hero{
-    position:relative; border-radius:var(--radius-lg); padding:26px 22px 22px; margin:4px 16px 0;
-    background:linear-gradient(150deg, var(--surface-2) 0%, #050505 78%);
+    position:relative; border-radius:var(--radius-lg); padding:28px 22px 22px; margin:4px 16px 0; min-height:210px;
+    background:radial-gradient(circle at 85% 0%, rgba(30,154,84,0.28), transparent 55%), linear-gradient(160deg, #111 0%, #050505 75%);
     border:1px solid var(--line); overflow:hidden;
   }
   .hero::before{
@@ -81,25 +81,23 @@
     background:repeating-linear-gradient(90deg, transparent 0 34px, rgba(30,154,84,0.04) 34px 35px);
     pointer-events:none;
   }
-  .hero-glow{ display:none; }
+  .hero-icon-bg{ position:absolute; top:-28px; right:-28px; opacity:0.08; color:#fff; pointer-events:none; }
   .hero-top{ position:relative; }
-  .hero-label{ position:relative; display:inline-flex; align-items:center; gap:6px; font-size:11px; letter-spacing:0.15em; text-transform:uppercase; color:var(--gold); font-weight:700; }
+  .hero-label{ position:relative; font-size:11px; letter-spacing:0.15em; text-transform:uppercase; color:var(--gold); font-weight:700; }
   .hero-value{
-    position:relative; font-size:38px; font-weight:800; margin:8px 0 3px; line-height:1.04; letter-spacing:-0.01em;
-    background:linear-gradient(100deg, #FFFFFF 30%, var(--mint) 100%);
-    -webkit-background-clip:text; background-clip:text; color:transparent;
+    position:relative; font-size:46px; font-weight:800; margin:10px 0 5px; line-height:0.98; letter-spacing:-0.02em; color:#fff;
   }
-  .hero-value small{ font-size:17px; color:var(--text-dim); font-weight:600; margin-left:4px; -webkit-text-fill-color:var(--text-dim); }
-  .hero-sub{ position:relative; color:var(--text-dim); font-size:13px; }
-  .hero-stats{ position:relative; display:flex; gap:10px; margin-top:20px; }
-  .hero-stat{
-    flex:1; background:linear-gradient(160deg, rgba(255,255,255,0.05), rgba(255,255,255,0.015));
-    border:1px solid var(--line-soft); border-radius:var(--radius-sm); padding:11px 12px 10px;
-    transition:border-color .15s ease;
+  .hero-value .unit{ font-size:19px; font-weight:600; color:var(--text-dim); margin-left:3px; }
+  .hero-sub{ position:relative; color:var(--text-dim); font-size:13px; margin-bottom:18px; }
+  .hero-stats{
+    position:relative; display:flex; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.08);
+    border-radius:14px; overflow:hidden;
   }
-  .hero-stat-icon{ color:var(--green); opacity:0.85; margin-bottom:6px; display:block; }
-  .hero-stat .n{ font-size:19px; font-weight:700; }
-  .hero-stat .l{ font-size:10px; color:var(--text-faint); text-transform:uppercase; letter-spacing:0.07em; margin-top:2px; }
+  .hero-stat{ flex:1; text-align:center; padding:12px 4px 10px; }
+  .hero-stat + .hero-stat{ border-left:1px solid rgba(255,255,255,0.08); }
+  .hero-stat-icon{ color:var(--green); opacity:0.9; margin:0 auto 6px; display:block; }
+  .hero-stat .n{ font-size:18px; font-weight:800; color:var(--green); }
+  .hero-stat .l{ font-size:9px; color:var(--text-faint); text-transform:uppercase; letter-spacing:0.06em; margin-top:2px; }
 
   .section-title{ display:flex; align-items:center; justify-content:space-between; margin:26px 16px 12px; }
   .section-title h2{ font-size:17.5px; font-weight:700; margin:0; }
@@ -396,12 +394,12 @@
   <!-- ===== INICIO (dashboard) ===== -->
   <div class="view active" id="view-home">
     <div class="hero">
-      <div class="hero-glow"></div>
+      <svg class="hero-icon-bg" width="220" height="220" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
       <div class="hero-top">
-        <div class="hero-label"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.6 7.1.6-5.4 4.7 1.6 7-6.2-3.9L6 21l1.6-7L2.2 9.2l7.1-.6z"/></svg>Tiempo total de visualización</div>
+        <div class="hero-label">Tus series en cifras</div>
       </div>
-      <div class="hero-value" id="heroTime">—</div>
-      <div class="hero-sub" id="heroSub">— series en la bitácora</div>
+      <div class="hero-value" id="heroTime">— <span class="unit">días</span></div>
+      <div class="hero-sub" id="heroSub">—</div>
       <div class="hero-stats">
         <div class="hero-stat">
           <svg class="hero-stat-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v6c0 1.66 3.58 3 8 3s8-1.34 8-3V5"/><path d="M4 11v6c0 1.66 3.58 3 8 3s8-1.34 8-3v-6"/></svg>
@@ -1183,8 +1181,12 @@ function renderDashboard(){
   const totalCaps = DATA.reduce((a,s)=>a+(s.capsVistos||0),0);
   const avgNota = DATA.length ? (DATA.reduce((a,s)=>a+(Number(s.nota)||0),0)/DATA.length) : 0;
 
-  document.getElementById('heroTime').textContent = fmtMinutesLong(totalMin);
-  document.getElementById('heroSub').textContent = `${DATA.length} series en la bitácora`;
+  const totalMinInt = Math.round(totalMin);
+  const heroDays = Math.floor(totalMinInt / 1440);
+  const heroHours = Math.floor((totalMinInt % 1440) / 60);
+  const heroMins = totalMinInt % 60;
+  document.getElementById('heroTime').innerHTML = `${heroDays} <span class="unit">${heroDays===1?'día':'días'}</span>`;
+  document.getElementById('heroSub').textContent = `${heroHours} ${heroHours===1?'hora':'horas'} y ${heroMins} ${heroMins===1?'minuto':'minutos'} vistos`;
   document.getElementById('statSeries').textContent = DATA.length;
   document.getElementById('statCaps').textContent = totalCaps;
   document.getElementById('statNota').textContent = avgNota.toFixed(1);
